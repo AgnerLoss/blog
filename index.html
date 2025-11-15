@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Agner Loss Rodrigues - Arquiteto AWS</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <header class="header">
+        <h1>Agner Loss Rodrigues</h1>
+        <p>Estudante para Arquiteto de Soluções AWS (SAA-C03)</p>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <h2>Sobre Mim</h2>
+            <p>Olá! Meu nome é Agner Loss Rodrigues. Este site é meu projeto prático para a certificação AWS Solutions Architect Associate. Estou focado em Cloud Computing, Infraestrutura como Código (IaC) e arquiteturas Serverless.</p>
+            <p>Esta página está hospedada no **Amazon S3** e distribuída via **Amazon CloudFront** — uma arquitetura 100% *Serverless* e de custo ultra-baixo!</p>
+        </section>
+
+        <section class="section">
+            <h2>Projetos AWS</h2>
+            <ul>
+                <li>**Hospedagem Estática (Concluído):** S3, CloudFront, ACM, Route 53 e OAC.</li>
+                <li>**Formulário Serverless (Concluído):** API Gateway, Lambda, SES.</li>
+                <li>**Próximo Passo:** Monitoramento com CloudWatch ou Implementação CI/CD.</li>
+            </ul>
+        </section>
+        
+        <section class="section">
+            <h2>Contato</h2>
+            <form id="contactForm" onsubmit="return submitForm(event)">
+                <div class="form-group">
+                    <label for="name">Nome:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensagem:</label>
+                    <textarea id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit">Enviar Mensagem</button>
+                <p id="responseMessage" style="margin-top: 10px;"></p>
+            </form>
+        </section>
+    </main>
+    
+    <script>
+        
+    // API_ENDPOINT OBRIGATÓRIO (Seu Endpoint)
+    const API_ENDPOINT = "https://o9z47b1ns3.execute-api.us-east-1.amazonaws.com/prod"; 
+
+    function submitForm(event) {
+        event.preventDefault(); 
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+        const responseMessage = document.getElementById('responseMessage');
+
+        responseMessage.innerText = 'Enviando...';
+        responseMessage.style.color = '#ff9900'; 
+        
+        const payload = {
+            name: name,
+            email: email,
+            message: message
+        };
+
+        fetch(API_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            // VERIFICA SE A RESPOSTA HTTP FOI 2XX (SUCESSO)
+            if (response.ok) {
+                // Se a resposta for OK, tenta ler o JSON (que o Lambda retorna)
+                return response.json(); 
+            } else {
+                // Se for 403, 500, etc. (O PROBLEMA QUE ESTAVA ACONTECENDO)
+                // Lança um erro para o bloco .catch
+                throw new Error(`Erro de servidor. Status: ${response.status}`);
+            }
+        })
+        .then(data => {
+            // Este bloco SÓ é executado se o status for 200 (OK)
+            responseMessage.innerText = 'Mensagem enviada com sucesso! Verifique seu e-mail.';
+            responseMessage.style.color = 'green';
+            document.getElementById('contactForm').reset();
+        })
+        .catch(error => {
+            // Trata qualquer erro lançado (de rede, CORS ou status HTTP ruim)
+            responseMessage.innerText = 'Erro ao enviar. Por favor, tente novamente mais tarde.';
+            responseMessage.style.color = 'red';
+            console.error('Erro de Fetch ou Resposta:', error);
+        });
+
+        return false;
+    }
+    </script>
+
+    <footer class="footer">
+        <p>&copy; 2025 Meu Blog AWS. Hospedado na nuvem AWS.</p>
+    </footer>
+</body>
+</html>
