@@ -1,116 +1,172 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <title>Agner Loss Rodrigues – Tecnologia & Cloud</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil Agner Loss Rodrigues - Arquiteto AWS</title>
-    <link rel="stylesheet" href="style.css"> 
+
+    <!-- Fonte simples e moderna -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="header">
-        <h1>Agner Loss Rodrigues</h1>
-        <p>Estudante para Arquiteto de Soluções AWS (SAA-C03)</p>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <span class="brand-logo">AL</span>
+                <span class="brand-name">Agner Loss Rodrigues</span>
+            </div>
+            <nav class="top-nav">
+                <a href="#sobre">Sobre</a>
+                <a href="#agora">Agora</a>
+                <a href="#stack">Stack</a>
+                <a href="#projetos">Projetos</a>
+                <a href="#contato">Contato</a>
+            </nav>
+        </div>
     </header>
 
-    <main class="container">
-        <section class="section">
-            <h2>Sobre Mim</h2>
-            <p>Olá! Meu nome é Agner Loss Rodrigues. Este site é meu projeto prático para a certificação AWS Solutions Architect Associate. Estou focado em Cloud Computing, Infraestrutura como Código (IaC) e arquiteturas Serverless.</p>
-            <p>Esta página está hospedada no **Amazon S3** e distribuída via **Amazon CloudFront** — uma arquitetura 100% *Serverless* e de custo ultra-baixo!</p>
-            <p>Neste momento, implementei o Codepipeline na AWS...meia hora perdida com uma variavel de ambiente errada</p>
-            <p>Ainda na luta...mas vamos vencer...agora vai</p>
-            <p>ATive que refazer as politicas...vamos ver agora</p>
+    <main class="page">
+        <!-- HERO / CABEÇALHO -->
+        <section class="card hero" id="sobre">
+            <div class="hero-photo">
+                <!-- Salve sua foto como img/agner.jpg (por exemplo) -->
+                <img src="img/agner.jpg" alt="Foto de Agner Loss Rodrigues">
+            </div>
+            <div class="hero-content">
+                <p class="hero-tag">Gestor de Tecnologia • Saúde Pública • Cloud & DevOps</p>
+                <h1>Agner Loss Rodrigues</h1>
+                <p class="hero-subtitle">
+                    Gestor de TI na Secretaria de Saúde de Serra-ES, em transição para Cloud, SRE e cultura DevOps.
+                    Foco em automação, confiabilidade e ambientes escaláveis na saúde pública.
+                </p>
+
+                <div class="hero-pills">
+                    <span class="pill">Gestão de TI na Saúde</span>
+                    <span class="pill">Cloud (AWS & Azure)</span>
+                    <span class="pill">DevOps & SRE</span>
+                    <span class="pill">Serviço Público</span>
+                </div>
+            </div>
         </section>
 
-        <section class="section">
-            <h2>Projetos AWS</h2>
-            <ul>
-                <li>**Hospedagem Estática (Concluído):** S3, CloudFront, ACM, Route 53 e OAC.</li>
-                <li>**Formulário Serverless (Concluído):** API Gateway, Lambda, SES.</li>
-                <li>**Próximo Passo:** Monitoramento com CloudWatch ou Implementação CI/CD.</li>
+        <!-- RESUMO -->
+        <section class="card">
+            <h2>Resumo</h2>
+            <p>
+                Sou gestor de tecnologia com mais de 20 anos de experiência no serviço público, sendo os últimos cinco dedicados à área de tecnologia da saúde. 
+                Atualmente, atuo na gestão de TI da Secretaria de Saúde de Serra-ES, coordenando infraestrutura, segurança da informação, equipes técnicas e projetos de tecnologia em mais de 40 unidades de saúde.
+            </p>
+            <p>
+                Tenho formação em Licenciatura em Informática, Administração e pós-graduação em Projetos em Cloud Computing. 
+                Possuo certificações em Scrum, AWS e Azure.
+            </p>
+            <p>
+                Estou em transição de carreira para as áreas de Cloud, SRE e cultura DevOps, com foco em automação, confiabilidade e escalabilidade de ambientes. 
+                Tenho estudado e praticado ferramentas como Linux, Docker, Kubernetes, Terraform, Vagrant, Ansible, Git, Prometheus, Grafana e Zabbix, buscando aplicar esse conhecimento para modernizar os serviços de TI e elevar a qualidade do atendimento à população.
+            </p>
+            <p>
+                Meu objetivo é unir experiência em gestão pública à inovação tecnológica, contribuindo para soluções mais eficientes, seguras e sustentáveis na área da saúde.
+            </p>
+        </section>
+
+        <!-- O QUE ESTOU FAZENDO AGORA -->
+        <section class="card" id="agora">
+            <h2>O que estou fazendo agora</h2>
+            <ul class="simple-list">
+                <li>Implantando e evoluindo infraestrutura de TI em mais de 40 unidades de saúde em Serra-ES.</li>
+                <li>Estudando e praticando arquitetura em nuvem focada em AWS (SAA) e automação com Terraform, Ansible e Git.</li>
+                <li>Aplicando conceitos de SRE e observabilidade com Prometheus, Grafana e Zabbix.</li>
+                <li>Construindo projetos pessoais em Cloud para portfólio (hospedagem estática, CI/CD, monitoramento, etc.).</li>
             </ul>
         </section>
-        
-        <section class="section">
+
+        <!-- STACK -->
+        <section class="card" id="stack">
+            <h2>Stack & Ferramentas</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Gestão & Métodos</h3>
+                    <ul class="simple-list">
+                        <li>Gestão de TI na saúde pública</li>
+                        <li>Scrum, Kanban e gestão de equipes técnicas</li>
+                        <li>Governança, segurança da informação e continuidade de serviços</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Cloud & DevOps</h3>
+                    <ul class="simple-list">
+                        <li>AWS e Azure</li>
+                        <li>Linux, Docker, Kubernetes</li>
+                        <li>Terraform, Vagrant, Ansible</li>
+                        <li>Git, CI/CD, automação de infraestrutura</li>
+                        <li>Prometheus, Grafana, Zabbix</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJETOS (espaço pra você ir preenchendo) -->
+        <section class="card" id="projetos">
+            <h2>Projetos em destaque</h2>
+
+            <div class="project">
+                <h3>Hospedagem estática 100% em Cloud</h3>
+                <p class="project-meta">S3 • CloudFront • ACM • Route 53 • CI/CD com CodePipeline</p>
+                <p>
+                    Site pessoal hospedado em Amazon S3 com distribuição via CloudFront, certificado SSL gerenciado e 
+                    automação de deploy com CodePipeline. Projeto focado em boas práticas de segurança, custo e desempenho.
+                </p>
+            </div>
+
+            <div class="project project-placeholder">
+                <h3>Próximo case</h3>
+                <p>
+                    Aqui você pode descrever, em formato de história, algum projeto legal na Secretaria de Saúde
+                    (ex.: monitoramento de infraestrutura, projeto de impressão, migração para nuvem, etc.).
+                </p>
+            </div>
+        </section>
+
+        <!-- CONTATO -->
+        <section class="card" id="contato">
             <h2>Contato</h2>
-            <form id="contactForm" onsubmit="return submitForm(event)">
+            <p>Quer trocar ideia sobre tecnologia na saúde, cloud ou gestão de TI?</p>
+
+            <form class="contact-form">
                 <div class="form-group">
-                    <label for="name">Nome:</label>
-                    <input type="text" id="name" required>
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome">
                 </div>
+
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" required>
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com">
                 </div>
+
                 <div class="form-group">
-                    <label for="message">Mensagem:</label>
-                    <textarea id="message" rows="5" required></textarea>
+                    <label for="mensagem">Mensagem</label>
+                    <textarea id="mensagem" name="mensagem" rows="4" placeholder="Como posso ajudar?"></textarea>
                 </div>
-                <button type="submit">Enviar Mensagem</button>
-                <p id="responseMessage" style="margin-top: 10px;"></p>
+
+                <button type="submit">Enviar mensagem</button>
             </form>
+            <p class="contact-note">
+                (Formulário estático por enquanto – dá pra integrar depois com um backend serverless.)
+            </p>
         </section>
     </main>
-    
-    <script>
-        
-    // API_ENDPOINT OBRIGATÓRIO (Seu Endpoint)
-    const API_ENDPOINT = "https://o9z47b1ns3.execute-api.us-east-1.amazonaws.com/prod"; 
-
-    function submitForm(event) {
-        event.preventDefault(); 
-
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
-        const responseMessage = document.getElementById('responseMessage');
-
-        responseMessage.innerText = 'Enviando...';
-        responseMessage.style.color = '#ff9900'; 
-        
-        const payload = {
-            name: name,
-            email: email,
-            message: message
-        };
-
-        fetch(API_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload)
-        })
-        .then(response => {
-            // VERIFICA SE A RESPOSTA HTTP FOI 2XX (SUCESSO)
-            if (response.ok) {
-                // Se a resposta for OK, tenta ler o JSON (que o Lambda retorna)
-                return response.json(); 
-            } else {
-                // Se for 403, 500, etc. (O PROBLEMA QUE ESTAVA ACONTECENDO)
-                // Lança um erro para o bloco .catch
-                throw new Error(`Erro de servidor. Status: ${response.status}`);
-            }
-        })
-        .then(data => {
-            // Este bloco SÓ é executado se o status for 200 (OK)
-            responseMessage.innerText = 'Mensagem enviada com sucesso! Verifique seu e-mail.';
-            responseMessage.style.color = 'green';
-            document.getElementById('contactForm').reset();
-        })
-        .catch(error => {
-            // Trata qualquer erro lançado (de rede, CORS ou status HTTP ruim)
-            responseMessage.innerText = 'Erro ao enviar. Por favor, tente novamente mais tarde.';
-            responseMessage.style.color = 'red';
-            console.error('Erro de Fetch ou Resposta:', error);
-        });
-
-        return false;
-    }
-    </script>
 
     <footer class="footer">
-        <p>&copy; 2025 Meu Blog AWS. Hospedado na nuvem AWS.</p>
+        <p>© <span id="ano"></span> Agner Loss Rodrigues – Serra / ES</p>
     </footer>
+
+    <script>
+        // ano automático no rodapé
+        document.getElementById('ano').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
