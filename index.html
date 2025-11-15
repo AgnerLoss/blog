@@ -1,172 +1,169 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Agner Loss Rodrigues – Tecnologia & Cloud</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agner Loss Rodrigues | Gestão de TI & Cloud</title>
 
-    <!-- Fonte simples e moderna -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Fonte simples e limpa -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Se você tiver um favicon, suba como favicon.ico no bucket -->
+    <!-- <link rel="icon" type="image/x-icon" href="favicon.ico"> -->
 </head>
 <body>
-    <header class="topbar">
-        <div class="topbar-inner">
-            <div class="brand">
-                <span class="brand-logo">AL</span>
-                <span class="brand-name">Agner Loss Rodrigues</span>
-            </div>
-            <nav class="top-nav">
-                <a href="#sobre">Sobre</a>
-                <a href="#agora">Agora</a>
-                <a href="#stack">Stack</a>
-                <a href="#projetos">Projetos</a>
-                <a href="#contato">Contato</a>
-            </nav>
-        </div>
-    </header>
-
     <main class="page">
-        <!-- HERO / CABEÇALHO -->
-        <section class="card hero" id="sobre">
-            <div class="hero-photo">
-                <!-- Salve sua foto como img/agner.jpg (por exemplo) -->
-                <img src="https://s3.us-east-1.amazonaws.com/k8sloss.com.br/img/agner.png" alt="Foto de Agner Loss Rodrigues">
+        <!-- CABEÇALHO -->
+        <header class="header card">
+            <div class="avatar-wrapper">
+                <!-- Salve sua foto como /img/agner.jpg no bucket e deixe pública -->
+                <img src="img/agner.jpg" alt="Foto de Agner Loss Rodrigues" class="avatar">
             </div>
-            <div class="hero-content">
-                <p class="hero-tag">Gestor de Tecnologia • Saúde Pública • Cloud & DevOps</p>
+
+            <div class="header-info">
                 <h1>Agner Loss Rodrigues</h1>
-                <p class="hero-subtitle">
-                    Gestor de TI na Secretaria de Saúde de Serra-ES, em transição para Cloud, SRE e cultura DevOps.
-                    Foco em automação, confiabilidade e ambientes escaláveis na saúde pública.
+                <p class="headline">
+                    Gestor de Tecnologia &bull; Saúde Pública &bull; Cloud &amp; DevOps
                 </p>
 
-                <div class="hero-pills">
-                    <span class="pill">Gestão de TI na Saúde</span>
-                    <span class="pill">Cloud (AWS & Azure)</span>
-                    <span class="pill">DevOps & SRE</span>
-                    <span class="pill">Serviço Público</span>
+                <div class="chips">
+                    <span class="chip">Gestão de TI na Saúde</span>
+                    <span class="chip">Cloud (AWS &amp; Azure)</span>
+                    <span class="chip">DevOps &amp; SRE</span>
+                    <span class="chip">Serviço Público</span>
                 </div>
             </div>
-        </section>
+        </header>
 
         <!-- RESUMO -->
-        <section class="card">
+        <section class="card section">
             <h2>Resumo</h2>
             <p>
-                Sou gestor de tecnologia com mais de 20 anos de experiência no serviço público, sendo os últimos cinco dedicados à área de tecnologia da saúde. 
-                Atualmente, atuo na gestão de TI da Secretaria de Saúde de Serra-ES, coordenando infraestrutura, segurança da informação, equipes técnicas e projetos de tecnologia em mais de 40 unidades de saúde.
+                Sou gestor de tecnologia com mais de 20 anos de experiência no serviço público,
+                sendo os últimos cinco dedicados à área de tecnologia da saúde. Atualmente, atuo
+                na gestão de TI da Secretaria de Saúde de Serra-ES, coordenando infraestrutura,
+                segurança da informação, equipes técnicas e projetos de tecnologia em mais de
+                40 unidades de saúde.
             </p>
             <p>
-                Tenho formação em Licenciatura em Informática, Administração e pós-graduação em Projetos em Cloud Computing. 
-                Possuo certificações em Scrum, AWS e Azure.
+                Tenho formação em Licenciatura em Informática, Administração e pós-graduação
+                em Projetos em Cloud Computing. Possuo certificações em Scrum, AWS e Azure.
             </p>
             <p>
-                Estou em transição de carreira para as áreas de Cloud, SRE e cultura DevOps, com foco em automação, confiabilidade e escalabilidade de ambientes. 
-                Tenho estudado e praticado ferramentas como Linux, Docker, Kubernetes, Terraform, Vagrant, Ansible, Git, Prometheus, Grafana e Zabbix, buscando aplicar esse conhecimento para modernizar os serviços de TI e elevar a qualidade do atendimento à população.
+                Estou em transição de carreira para as áreas de Cloud, SRE e cultura DevOps,
+                com foco em automação, confiabilidade e escalabilidade de ambientes. Tenho
+                estudado e praticado ferramentas como Linux, Docker, Kubernetes, Terraform,
+                Vagrant, Ansible, Git, Prometheus, Grafana e Zabbix, buscando aplicar esse
+                conhecimento para modernizar os serviços de TI e elevar a qualidade do
+                atendimento à população.
             </p>
             <p>
-                Meu objetivo é unir experiência em gestão pública à inovação tecnológica, contribuindo para soluções mais eficientes, seguras e sustentáveis na área da saúde.
+                Meu objetivo é unir experiência em gestão pública à inovação tecnológica,
+                contribuindo para soluções mais eficientes, seguras e sustentáveis na área
+                da saúde.
             </p>
         </section>
 
         <!-- O QUE ESTOU FAZENDO AGORA -->
-        <section class="card" id="agora">
+        <section class="card section">
             <h2>O que estou fazendo agora</h2>
-            <ul class="simple-list">
+            <ul class="list">
                 <li>Implantando e evoluindo infraestrutura de TI em mais de 40 unidades de saúde em Serra-ES.</li>
-                <li>Estudando e praticando arquitetura em nuvem focada em AWS (SAA) e automação com Terraform, Ansible e Git.</li>
-                <li>Aplicando conceitos de SRE e observabilidade com Prometheus, Grafana e Zabbix.</li>
-                <li>Construindo projetos pessoais em Cloud para portfólio (hospedagem estática, CI/CD, monitoramento, etc.).</li>
+                <li>Estudando e praticando arquitetura em AWS (SAA) e automação com Terraform, Ansible e Git.</li>
+                <li>Construindo conhecimento em observabilidade com Prometheus, Grafana e Zabbix.</li>
+                <li>Aplicando práticas de DevOps e SRE para aumentar confiabilidade e reduzir incidentes.</li>
             </ul>
         </section>
 
-        <!-- STACK -->
-        <section class="card" id="stack">
-            <h2>Stack & Ferramentas</h2>
-            <div class="grid-2">
-                <div>
-                    <h3>Gestão & Métodos</h3>
-                    <ul class="simple-list">
-                        <li>Gestão de TI na saúde pública</li>
-                        <li>Scrum, Kanban e gestão de equipes técnicas</li>
-                        <li>Governança, segurança da informação e continuidade de serviços</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>Cloud & DevOps</h3>
-                    <ul class="simple-list">
-                        <li>AWS e Azure</li>
-                        <li>Linux, Docker, Kubernetes</li>
-                        <li>Terraform, Vagrant, Ansible</li>
-                        <li>Git, CI/CD, automação de infraestrutura</li>
-                        <li>Prometheus, Grafana, Zabbix</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROJETOS (espaço pra você ir preenchendo) -->
-        <section class="card" id="projetos">
-            <h2>Projetos em destaque</h2>
+        <!-- PROJETOS EM CLOUD / DEVOPS -->
+        <section class="card section">
+            <h2>Projetos em Cloud &amp; DevOps</h2>
 
             <div class="project">
-                <h3>Hospedagem estática 100% em Cloud</h3>
-                <p class="project-meta">S3 • CloudFront • ACM • Route 53 • CI/CD com CodePipeline</p>
+                <h3>Hospedagem Estática com AWS S3 + CloudFront</h3>
                 <p>
-                    Site pessoal hospedado em Amazon S3 com distribuição via CloudFront, certificado SSL gerenciado e 
-                    automação de deploy com CodePipeline. Projeto focado em boas práticas de segurança, custo e desempenho.
+                    Site estático hospedado em Amazon S3 e distribuído via Amazon CloudFront,
+                    com HTTPS, custo baixo e alta disponibilidade.
                 </p>
             </div>
 
-            <div class="project project-placeholder">
-                <h3>Próximo case</h3>
+            <div class="project">
+                <h3>Formulários Serverless</h3>
                 <p>
-                    Aqui você pode descrever, em formato de história, algum projeto legal na Secretaria de Saúde
-                    (ex.: monitoramento de infraestrutura, projeto de impressão, migração para nuvem, etc.).
+                    Criação de formulários utilizando API Gateway, Lambda e serviços de e-mail,
+                    eliminando a necessidade de servidores dedicados.
+                </p>
+            </div>
+
+            <div class="project">
+                <h3>Monitoramento e Observabilidade</h3>
+                <p>
+                    Estudos e provas de conceito com Prometheus, Grafana e Zabbix para monitoração
+                    de infraestrutura, aplicações e serviços críticos de saúde.
+                </p>
+            </div>
+
+            <div class="project">
+                <h3>Automação de Infraestrutura</h3>
+                <p>
+                    Uso de Terraform, Ansible e Git para padronizar e versionar a infraestrutura,
+                    reduzindo erros manuais e acelerando entregas.
                 </p>
             </div>
         </section>
 
         <!-- CONTATO -->
-        <section class="card" id="contato">
+        <section class="card section">
             <h2>Contato</h2>
-            <p>Quer trocar ideia sobre tecnologia na saúde, cloud ou gestão de TI?</p>
+            <p>
+                Quer trocar uma ideia sobre gestão de TI na saúde, cloud ou DevOps?
+            </p>
+            <p>
+                Você pode me encontrar pelo e-mail:
+                <strong>seu-email@exemplo.com</strong>
+                <!-- Troque pelo seu e-mail real -->
+            </p>
 
+            <!-- Se quiser manter um formulário simples: -->
+            <!--
             <form class="contact-form">
-                <div class="form-group">
-                    <label for="nome">Nome</label>
-                    <input type="text" id="nome" name="nome" placeholder="Seu nome">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="mensagem">Mensagem</label>
-                    <textarea id="mensagem" name="mensagem" rows="4" placeholder="Como posso ajudar?"></textarea>
-                </div>
-
-                <button type="submit">Enviar mensagem</button>
+                <label>
+                    Nome
+                    <input type="text" placeholder="Seu nome">
+                </label>
+                <label>
+                    E-mail
+                    <input type="email" placeholder="seu@email.com">
+                </label>
+                <label>
+                    Mensagem
+                    <textarea rows="4" placeholder="Como posso ajudar?"></textarea>
+                </label>
+                <button type="submit">Enviar</button>
             </form>
-            <p class="contact-note">
-                (Formulário estático por enquanto – dá pra integrar depois com um backend serverless.)
+            -->
+        </section>
+
+        <!-- FUTURO: FAMÍLIA / VIDA PESSOAL -->
+        <!--
+        <section class="card section">
+            <h2>Família &amp; Vida Pessoal</h2>
+            <p>
+                Espaço para colocar fotos e histórias com a família, que é parte importante de tudo isso. 💙
             </p>
         </section>
+        -->
+
+        <footer class="footer">
+            <p>© <span id="year"></span> Agner Loss Rodrigues · Simples, objetivo e em constante evolução.</p>
+        </footer>
     </main>
 
-    <footer class="footer">
-        <p>© <span id="ano"></span> Agner Loss Rodrigues – Serra / ES</p>
-    </footer>
-
     <script>
-        // ano automático no rodapé
-        document.getElementById('ano').textContent = new Date().getFullYear();
+        // Só para o ano do rodapé
+        document.getElementById('year').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
