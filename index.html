@@ -11,7 +11,7 @@
     <!-- Barra fixa de navegação -->
     <header class="topbar">
         <div class="topbar-inner">
-            <div class="brand">
+            <a href="/" class="brand">
                 <span class="brand-logo">AL</span>
                 <div class="brand-text">
                     <span class="brand-name">Agner Loss Rodrigues</span>
@@ -19,11 +19,10 @@
                         Gestor de Tecnologia • Saúde Pública • Cloud &amp; DevOps
                     </span>
                 </div>
-            </div>
+            </a>
             <nav class="nav-links">
                 <a href="#sobre">Sobre</a>
-                <!-- AGORA VAI PARA /projetos/ -->
-                <a href="projetos/index.html">Projetos</a>
+                <a href="/projetos/index.html">Projetos</a>
                 <a href="#contato">Contato</a>
             </nav>
         </div>
@@ -31,7 +30,8 @@
 
     <!-- Conteúdo principal -->
     <main class="page">
-        <!-- Hero -->
+
+        <!-- “Hero” com foto e tags -->
         <section id="sobre" class="card hero">
             <div class="hero-top">
                 <div class="hero-info">
@@ -48,8 +48,10 @@
                     </div>
                 </div>
 
+                <!-- Foto (ajuste o caminho se precisar) -->
                 <div class="hero-photo">
-                    <img src="img/agner.png" alt="Foto de Agner Loss Rodrigues" />
+                    <img src="https://k8sloss.com.br/img/agner.png"
+                         alt="Foto de Agner Loss Rodrigues" />
                 </div>
             </div>
         </section>
@@ -58,25 +60,38 @@
         <section class="card" aria-labelledby="titulo-resumo">
             <h2 id="titulo-resumo">Resumo</h2>
             <p>
-                Sou gestor de tecnologia com mais de 20 anos de experiência no serviço público, sendo os últimos cinco
-                dedicados à área de tecnologia da saúde. Atualmente, atuo na gestão de TI da Secretaria de Saúde de Serra-ES,
-                coordenando infraestrutura, segurança da informação, equipes técnicas e projetos de tecnologia em mais de
-                40 unidades de saúde.
+                Sou gestor de tecnologia com mais de 20 anos de experiência no serviço público,
+                sendo os últimos cinco dedicados à área de tecnologia da saúde. Atualmente,
+                atuo na gestão de TI da Secretaria de Saúde de Serra-ES, coordenando
+                infraestrutura, segurança da informação, equipes técnicas e projetos de tecnologia
+                em mais de 40 unidades de saúde.
             </p>
             <p>
-                Tenho formação em Licenciatura em Informática, Administração e pós-graduação em Projetos em Cloud Computing.
-                Possuo certificações em Scrum, AWS e Azure.
+                Tenho formação em Licenciatura em Informática, Administração e pós-graduação em
+                Projetos em Cloud Computing. Possuo certificações em Scrum, AWS e Azure.
             </p>
             <p>
-                Atualmente estou em transição de carreira para as áreas de Cloud, SRE e cultura DevOps, com foco em automação,
-                confiabilidade e escalabilidade de ambientes. Tenho estudado e praticado ferramentas como Linux, Docker,
-                Kubernetes, Terraform, Vagrant, Ansible, Git, Prometheus, Grafana e Zabbix, buscando aplicar esse conhecimento
-                para modernizar os serviços de TI e elevar a qualidade do atendimento à população.
+                Estou em transição de carreira para as áreas de Cloud, SRE e cultura DevOps, com foco
+                em automação, confiabilidade e escalabilidade de ambientes. Tenho estudado e praticado
+                ferramentas como Linux, Docker, Kubernetes, Terraform, Vagrant, Ansible, Git,
+                Prometheus, Grafana e Zabbix, buscando aplicar esse conhecimento para modernizar
+                os serviços de TI e elevar a qualidade do atendimento à população.
             </p>
             <p>
-                Meu objetivo é unir experiência em gestão pública à inovação tecnológica, contribuindo para soluções mais
-                eficientes, seguras e sustentáveis na área da saúde.
+                Meu objetivo é unir experiência em gestão pública à inovação tecnológica,
+                contribuindo para soluções mais eficientes, seguras e sustentáveis na área da saúde.
             </p>
+        </section>
+
+        <!-- O que estou fazendo agora -->
+        <section id="atuacao" class="card" aria-labelledby="titulo-atuacao">
+            <h2 id="titulo-atuacao">O que estou fazendo agora</h2>
+            <ul class="list">
+                <li>Implantando e evoluindo infraestrutura de TI em mais de 40 unidades de saúde em Serra-ES.</li>
+                <li>Estudando e praticando arquitetura em AWS (SAA) e automação com Terraform, Ansible e Git.</li>
+                <li>Construindo conhecimento em observabilidade com Prometheus, Grafana e Zabbix.</li>
+                <li>Aplicando práticas de DevOps e SRE para aumentar confiabilidade e reduzir incidentes.</li>
+            </ul>
         </section>
 
         <!-- Contato -->

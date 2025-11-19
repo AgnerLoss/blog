@@ -8,9 +8,10 @@
 </head>
 <body>
 
+    <!-- Barra fixa de navegação -->
     <header class="topbar">
         <div class="topbar-inner">
-            <div class="brand">
+            <a href="/" class="brand">
                 <span class="brand-logo">AL</span>
                 <div class="brand-text">
                     <span class="brand-name">Agner Loss Rodrigues</span>
@@ -18,57 +19,116 @@
                         Gestor de Tecnologia • Saúde Pública • Cloud &amp; DevOps
                     </span>
                 </div>
-            </div>
+            </a>
             <nav class="nav-links">
-                <!-- Botão Home -->
-                <a href="../index.html" class="btn-home">🏠 Home</a>
-                <!-- Volta pra home -->
-                <a href="../#sobre">Sobre</a>                                
-                <a href="../#contato">Contato</a>
+                <a href="/#sobre">Sobre</a>
+                <a href="/projetos/index.html" class="active">Projetos</a>
+                <a href="/#contato">Contato</a>
             </nav>
         </div>
     </header>
 
     <main class="page">
-        <section class="card">
-            <h1>Projetos em que estou trabalhando</h1>
+        <section class="card" aria-labelledby="titulo-projetos">
+            <h1 id="titulo-projetos">Projetos em Destaque</h1>
             <p>
-                Aqui eu registro o que estou fazendo no dia a dia como gestor de TI, além dos estudos em Cloud, SRE e DevOps.
+                Aqui eu compartilho alguns projetos que tenho conduzido na Secretaria de Saúde de Serra-ES,
+                sempre com foco em disponibilidade, segurança e melhoria do atendimento à população.
             </p>
         </section>
 
-        <!-- “O que estou fazendo agora” migrado para cá -->
-        <section class="card" aria-labelledby="titulo-agora">
-            <h2 id="titulo-agora">O que estou fazendo agora</h2>
+        <!-- Projeto: Modernização da Rede de Dados da Saúde -->
+        <section class="card" aria-labelledby="titulo-rede-saude">
+            <h2 id="titulo-rede-saude">
+                Modernização da Rede de Dados da Saúde de Serra-ES
+            </h2>
+
+            <p>
+                Um dos projetos que lideramos foi a modernização da conectividade das unidades de saúde,
+                desvinculando a infraestrutura de fibra das escolas e ampliando significativamente a
+                capacidade de internet dedicada à saúde.
+            </p>
+
+            <h3>Contexto</h3>
+            <p>
+                Antes da nossa gestão, toda a prefeitura compartilhava um único link de internet
+                de aproximadamente <strong>200&nbsp;Mb</strong>. Além disso, muitas unidades de
+                saúde dependiam fisicamente da fibra das escolas: quando a escola tinha problema
+                de conectividade, a unidade de saúde também ficava indisponível.
+            </p>
+
+            <h3>Desafio</h3>
             <ul class="list">
-                <li>Implantando e evoluindo infraestrutura de TI em mais de 40 unidades de saúde em Serra-ES.</li>
-                <li>Estudando e praticando arquitetura em AWS (SAA) e automação com Terraform, Ansible e Git.</li>
-                <li>Construindo conhecimento em observabilidade com Prometheus, Grafana e Zabbix.</li>
-                <li>Aplicando práticas de DevOps e SRE para aumentar confiabilidade e reduzir incidentes.</li>
+                <li>Eliminar a dependência da fibra das escolas.</li>
+                <li>Aumentar o link de internet dedicado exclusivamente para a saúde.</li>
+                <li>Reduzir indisponibilidades e abrir caminho para serviços mais críticos e em nuvem.</li>
             </ul>
-        </section>
 
-        <!-- Espaço pra projetos mais detalhados -->
-        <section class="card">
-            <h2>Projetos em destaque</h2>
+            <h3>Solução Implementada</h3>
+            <p>
+                Iniciamos estudos, mapeamos toda a topologia de rede e escrevemos um projeto
+                técnico para reestruturar a infraestrutura. Entre as principais ações:
+            </p>
+            <ul class="list">
+                <li>
+                    Separação física e lógica da rede da saúde em relação à rede das escolas,
+                    com novo desenho de fibra e rotas dedicadas.
+                </li>
+                <li>
+                    Evolução do link de internet exclusivo para a saúde:
+                    de <strong>200&nbsp;Mb compartilhados</strong> para
+                    <strong>500&nbsp;Mb dedicados</strong> e, posteriormente, para
+                    <strong>1&nbsp;Gb dedicado</strong>.
+                </li>
+                <li>
+                    Monitoria centralizada via Zabbix, com mapas de rede mostrando o
+                    status de cada unidade e facilitando o troubleshooting.
+                </li>
+            </ul>
 
-            <article class="project">
-                <h3>Monitoramento de Unidades de Saúde</h3>
-                <p>
-                    Projeto de padronização e monitoramento de infraestrutura de TI nas unidades de saúde do município,
-                    com foco em disponibilidade, inventário e observabilidade.
-                </p>
-            </article>
+            <!-- Imagens da infraestrutura (antigo x atual) -->
+            <div class="gallery">
+                <figure class="gallery-item">
+                    <!-- ajuste o caminho do arquivo conforme você subir para o S3 -->
+                    <img src="../img/projetos/infra-antiga.png"
+                         alt="Topologia antiga da rede, com unidades de saúde dependentes das escolas" />
+                    <figcaption>
+                        Topologia antiga: saúde dependente da infraestrutura das escolas.
+                    </figcaption>
+                </figure>
 
-            <article class="project">
-                <h3>Jornada para Cloud e DevOps na Saúde</h3>
-                <p>
-                    Iniciativas de automação, IaC (Terraform, Ansible) e boas práticas de DevOps/SRE para ambientes
-                    críticos de saúde pública.
-                </p>
-            </article>
+                <figure class="gallery-item">
+                    <!-- ajuste o caminho do arquivo conforme você subir para o S3 -->
+                    <img src="../img/projetos/infra-atual.png"
+                         alt="Topologia atual da rede, com backbone dedicado para a saúde" />
+                    <figcaption>
+                        Topologia atual: rede própria da saúde, com backbone dedicado.
+                    </figcaption>
+                </figure>
+            </div>
 
-            <!-- Depois você vai só replicando <article> para novos projetos -->
+            <h3>Resultados</h3>
+            <ul class="list">
+                <li>
+                    Redução drástica das interrupções de link nas unidades de saúde,
+                    especialmente nas que antes dependiam das escolas.
+                </li>
+                <li>
+                    Capacidade de internet ampliada para <strong>1&nbsp;Gb dedicado</strong>,
+                    viabilizando sistemas mais pesados, prontuário eletrônico, telemedicina e integrações em nuvem.
+                </li>
+                <li>
+                    Maior visibilidade da rede, com painéis de monitoramento permitindo
+                    identificar rapidamente incidentes e agir de forma proativa.
+                </li>
+            </ul>
+
+            <h3>Próximos Passos</h3>
+            <p>
+                O próximo passo é implementar um <strong>link redundante</strong> para a rede da saúde,
+                garantindo ainda mais disponibilidade e resiliência para os sistemas críticos utilizados
+                diariamente por profissionais e cidadãos.
+            </p>
         </section>
     </main>
 
