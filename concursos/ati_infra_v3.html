@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ATI Infra · Concurso Vitória</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b27; --card: #1c2438; --border: #2d3a56;
+  --accent: #60a5fa; --accent2: #22d3ee; --green: #34d399; --red: #f87171;
+  --yellow: #fbbf24; --purple: #a78bfa; --text: #f1f5f9; --muted: #94a3b8;
+  --mono: "Space Mono", monospace; --sans: "Syne", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; }
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+.screen { display: none; flex-direction: column; flex: 1; animation: fadeIn .25s ease; }
+.screen.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 99;
+  background: rgba(13,17,23,.97); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+}
+.topbar .back { background: none; border: none; color: var(--accent); font-size: 22px; cursor: pointer; padding: 4px 8px; }
+.topbar h2 { font-weight: 800; font-size: 15px; flex: 1; color: var(--text); }
+.topbar .badge { font-family: var(--mono); font-size: 11px; color: var(--accent2); background: var(--border); padding: 3px 10px; border-radius: 20px; }
+
+/* HOME HEADER */
+.home-header { padding: 28px 20px 18px; border-bottom: 1px solid var(--border); }
+.home-header .label { font-family: var(--mono); font-size: 10px; color: var(--accent2); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 6px; }
+.home-header h1 { font-size: 24px; font-weight: 800; line-height: 1.15; }
+.home-header h1 span { color: var(--accent); }
+.home-header .sub { margin-top: 6px; font-size: 12px; color: var(--muted); }
+
+/* PROGRESS */
+.progress-strip { padding: 14px 20px; display: flex; gap: 10px; align-items: center; }
+.progress-strip .bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-strip .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .4s; }
+.progress-strip .pct { font-family: var(--mono); font-size: 12px; color: var(--accent2); }
+
+/* SECTION TITLE */
+.section-title { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; padding: 14px 20px 8px; }
+
+/* MODE GRID */
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 14px 14px; }
+.mode-btn {
+  background: #1c2438; border: 1px solid #2d3a56; border-radius: 14px; padding: 16px 13px;
+  cursor: pointer; transition: all .18s; display: flex; flex-direction: column; gap: 7px; text-align: left;
+}
+.mode-btn:active { transform: scale(.96); border-color: var(--accent); }
+.mode-btn .icon { font-size: 24px; }
+.mode-btn .title { font-size: 14px; font-weight: 800; color: var(--text); }
+.mode-btn .desc { font-size: 11px; color: #b0bcd4; line-height: 1.4; }
+.mode-btn.full { grid-column: span 2; }
+.mode-btn.accent { border-color: var(--accent); background: rgba(96,165,250,.08); }
+.mode-btn.purple { border-color: var(--purple); background: rgba(167,139,250,.08); }
+
+/* TOPIC LIST */
+.topic-list { padding: 0 14px 80px; display: flex; flex-direction: column; gap: 8px; }
+.topic-item {
+  background: #1c2438; border: 1px solid #2d3a56; border-radius: 13px; padding: 13px 15px;
+  display: flex; align-items: center; gap: 13px; cursor: pointer; transition: all .15s;
+}
+.topic-item:active { border-color: var(--accent); }
+.topic-item .t-icon { font-size: 20px; width: 32px; text-align: center; flex-shrink: 0; }
+.topic-item .t-info { flex: 1; min-width: 0; }
+.topic-item .t-name { font-size: 14px; font-weight: 700; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.topic-item .t-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+.topic-item .t-right { display: flex; align-items: center; gap: 8px; }
+.topic-item .t-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.topic-item .t-arrow { color: var(--muted); font-size: 14px; }
+.dot-done { background: var(--green); }
+.dot-partial { background: var(--yellow); }
+.dot-none { background: #2d3a56; }
+
+/* CATEGORY BADGE */
+.cat-badge { font-family: var(--mono); font-size: 9px; padding: 2px 7px; border-radius: 10px; flex-shrink: 0; }
+.cat-especifico { background: rgba(96,165,250,.15); color: var(--accent); border: 1px solid rgba(96,165,250,.3); }
+.cat-basico { background: rgba(34,211,238,.12); color: var(--accent2); border: 1px solid rgba(34,211,238,.25); }
+.cat-logica { background: rgba(167,139,250,.15); color: var(--purple); border: 1px solid rgba(167,139,250,.3); }
+
+/* RESUMO */
+.resumo-body { padding: 14px; flex: 1; overflow-y: auto; padding-bottom: 30px; }
+.resumo-section { margin-bottom: 22px; }
+.resumo-section h3 { font-size: 13px; font-weight: 800; color: var(--accent2); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.resumo-section p { font-size: 14px; color: #dde4ef; line-height: 1.7; }
+.resumo-section ul { padding-left: 16px; display: flex; flex-direction: column; gap: 5px; }
+.resumo-section li { font-size: 14px; color: #dde4ef; line-height: 1.6; }
+.resumo-section .highlight { background: rgba(96,165,250,.1); border-left: 3px solid var(--accent); padding: 10px 13px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 13px; color: var(--text); font-family: var(--mono); line-height: 1.6; }
+.resumo-section .warn { background: rgba(251,191,36,.09); border-left: 3px solid var(--yellow); padding: 10px 13px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 13px; color: #f1f5f9; line-height: 1.6; }
+.resumo-section .ok { background: rgba(52,211,153,.09); border-left: 3px solid var(--green); padding: 10px 13px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 13px; color: #f1f5f9; line-height: 1.6; }
+
+/* TRUTH TABLE */
+.truth-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; margin: 10px 0; border-radius: 10px; overflow: hidden; }
+.truth-table th { background: #2d3a56; color: var(--accent2); padding: 8px 6px; text-align: center; font-size: 12px; }
+.truth-table td { padding: 7px 6px; text-align: center; border-top: 1px solid #2d3a56; }
+.truth-table tr:nth-child(even) td { background: rgba(255,255,255,.03); }
+.truth-table .V { color: var(--green); font-weight: 700; }
+.truth-table .F { color: var(--red); font-weight: 700; }
+
+/* FLASHCARD */
+.fc-wrap { flex: 1; display: flex; flex-direction: column; padding: 14px; gap: 14px; }
+.fc-counter { font-family: var(--mono); font-size: 12px; color: var(--muted); text-align: center; }
+.fc-prog { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.fc-prog-fill { height: 100%; background: var(--accent); transition: width .3s; }
+.fc-card {
+  flex: 1; max-height: 360px; background: #1c2438; border: 1px solid #2d3a56;
+  border-radius: 18px; padding: 24px 20px; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center; gap: 14px;
+  cursor: pointer; transition: all .2s; position: relative; overflow: hidden;
+}
+.fc-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 70% 20%, rgba(96,165,250,.05), transparent 60%); }
+.fc-card .fc-label { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: .12em; text-transform: uppercase; }
+.fc-card .fc-q { font-size: 16px; font-weight: 700; line-height: 1.45; color: var(--text); }
+.fc-card .fc-a { font-size: 13px; color: #b8c8e0; line-height: 1.65; display: none; }
+.fc-card.flipped .fc-a { display: block; }
+.fc-card.flipped .fc-q { color: var(--accent2); }
+.fc-card .fc-tap { font-size: 11px; color: var(--muted); }
+.fc-actions { display: flex; gap: 10px; }
+.fc-btn { flex: 1; padding: 13px; border-radius: 13px; border: none; cursor: pointer; font-family: var(--sans); font-size: 14px; font-weight: 700; transition: all .15s; }
+.fc-btn:active { transform: scale(.96); }
+.fc-btn.wrong { background: rgba(248,113,113,.15); color: var(--red); border: 1px solid rgba(248,113,113,.3); }
+.fc-btn.right { background: rgba(52,211,153,.15); color: var(--green); border: 1px solid rgba(52,211,153,.3); }
+.fc-btn.next { background: var(--accent); color: #0d1117; font-weight: 800; }
+
+/* QUIZ */
+.quiz-wrap { flex: 1; padding: 14px; display: flex; flex-direction: column; gap: 13px; padding-bottom: 80px; overflow-y: auto; }
+.quiz-q { background: #1c2438; border: 1px solid #2d3a56; border-radius: 14px; padding: 16px; font-size: 15px; font-weight: 600; line-height: 1.55; color: var(--text); }
+.quiz-opts { display: flex; flex-direction: column; gap: 9px; }
+.quiz-opt {
+  background: #1c2438; border: 1px solid #2d3a56; border-radius: 13px; padding: 13px 15px;
+  font-size: 14px; color: var(--text); cursor: pointer; transition: all .15s;
+  display: flex; gap: 11px; align-items: flex-start;
+}
+.quiz-opt .opt-letter { font-family: var(--mono); font-size: 11px; color: var(--muted); padding-top: 2px; flex-shrink: 0; font-weight: 700; }
+.quiz-opt.correct { background: rgba(52,211,153,.12); border-color: var(--green); color: var(--green); }
+.quiz-opt.correct .opt-letter { color: var(--green); }
+.quiz-opt.wrong { background: rgba(248,113,113,.1); border-color: var(--red); color: var(--red); }
+.quiz-opt.wrong .opt-letter { color: var(--red); }
+.quiz-opt.disabled { pointer-events: none; }
+.quiz-explain { background: rgba(96,165,250,.08); border: 1px solid rgba(96,165,250,.2); border-radius: 13px; padding: 13px; font-size: 13px; color: #b8c8e0; line-height: 1.65; display: none; }
+.quiz-explain.show { display: block; }
+.quiz-next { background: var(--accent); color: #0d1117; border: none; border-radius: 13px; padding: 14px; width: 100%; font-family: var(--sans); font-size: 15px; font-weight: 800; cursor: pointer; display: none; margin-top: 2px; }
+.quiz-next.show { display: block; }
+.quiz-score { text-align: center; padding: 28px 16px; display: flex; flex-direction: column; align-items: center; gap: 13px; }
+.score-big { font-size: 58px; font-weight: 800; font-family: var(--mono); }
+.score-label { font-size: 15px; color: var(--muted); }
+.quiz-restart { background: #1c2438; border: 1px solid #2d3a56; border-radius: 13px; padding: 13px 22px; color: var(--text); font-family: var(--sans); font-size: 14px; font-weight: 700; cursor: pointer; }
+
+/* FILTER TABS */
+.filter-tabs { display: flex; gap: 7px; padding: 10px 14px 4px; overflow-x: auto; scrollbar-width: none; }
+.filter-tabs::-webkit-scrollbar { display: none; }
+.ftab { font-family: var(--mono); font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid #2d3a56; background: #1c2438; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all .15s; flex-shrink: 0; }
+.ftab.active { background: var(--accent); color: #0d1117; border-color: var(--accent); font-weight: 700; }
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(13,17,23,.97); backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border); display: flex;
+  padding: 8px 0 env(safe-area-inset-bottom, 8px); z-index: 98;
+}
+.bottom-nav button {
+  flex: 1; background: none; border: none; color: #94a3b8;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 10px; font-family: var(--sans); cursor: pointer; padding: 4px 0; transition: color .15s;
+}
+.bottom-nav button.active { color: var(--accent); }
+.bottom-nav button .nb-icon { font-size: 19px; }
+.scroll-content { flex: 1; overflow-y: auto; padding-bottom: 60px; }
+
+/* LOGIC INTERACTIVE */
+.logic-box { background: #1c2438; border: 1px solid #2d3a56; border-radius: 14px; padding: 16px; margin: 10px 0; }
+.logic-box .l-title { font-family: var(--mono); font-size: 11px; color: var(--accent2); margin-bottom: 10px; letter-spacing: .08em; }
+.logic-toggles { display: flex; gap: 10px; margin-bottom: 12px; }
+.logic-toggle { flex: 1; padding: 10px; border-radius: 10px; border: 2px solid #2d3a56; background: #161b27; font-family: var(--mono); font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; transition: all .2s; }
+.logic-toggle.true { border-color: var(--green); color: var(--green); background: rgba(52,211,153,.1); }
+.logic-toggle.false { border-color: var(--red); color: var(--red); background: rgba(248,113,113,.1); }
+.logic-result { display: flex; flex-direction: column; gap: 6px; }
+.logic-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; border-radius: 8px; background: rgba(255,255,255,.03); }
+.logic-row .op { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.logic-row .val { font-family: var(--mono); font-size: 14px; font-weight: 700; }
+.logic-row .val.V { color: var(--green); }
+.logic-row .val.F { color: var(--red); }
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- HOME -->
+<div id="screen-home" class="screen active">
+  <div class="scroll-content">
+    <div class="home-header">
+      <div class="label">Concurso Público · Vitória/ES · 2026</div>
+      <h1>ATI <span>Infraestrutura</span> &amp; Suporte</h1>
+      <div class="sub">5 jul 2026 · 60 questões · 80 pts · Foco no que mais cai</div>
+    </div>
+    <div class="progress-strip">
+      <div class="bar-wrap"><div class="bar-fill" id="global-prog" style="width:0%"></div></div>
+      <div class="pct" id="global-pct">0%</div>
+    </div>
+    <div class="section-title">Modo de estudo</div>
+    <div class="mode-grid">
+      <button class="mode-btn accent" onclick="showScreen('screen-flash')">
+        <div class="icon">🃏</div><div class="title">Flashcards</div><div class="desc">Pergunta &amp; resposta</div>
+      </button>
+      <button class="mode-btn" onclick="showScreen('screen-quiz')">
+        <div class="icon">🎯</div><div class="title">Quiz</div><div class="desc">4 alternativas + gabarito</div>
+      </button>
+      <button class="mode-btn purple full" onclick="showScreen('screen-logic')">
+        <div class="icon">🧠</div><div class="title">Lógica Interativa</div>
+        <div class="desc">Tabela verdade, conectivos e "se…então" com simulador ao vivo</div>
+      </button>
+      <button class="mode-btn full" onclick="showScreen('screen-topics')">
+        <div class="icon">📚</div><div class="title">Resumos por tema</div><div class="desc">Todos os blocos do edital</div>
+      </button>
+    </div>
+    <div class="section-title">Blocos do edital</div>
+    <div class="topic-list" id="topic-list"></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="active" onclick="showScreen('screen-home')"><span class="nb-icon">🏠</span>Início</button>
+    <button onclick="showScreen('screen-flash')"><span class="nb-icon">🃏</span>Cards</button>
+    <button onclick="showScreen('screen-quiz')"><span class="nb-icon">🎯</span>Quiz</button>
+    <button onclick="showScreen('screen-logic')"><span class="nb-icon">🧠</span>Lógica</button>
+    <button onclick="showScreen('screen-topics')"><span class="nb-icon">📚</span>Resumos</button>
+  </div>
+</div>
+
+<!-- TOPICS LIST -->
+<div id="screen-topics" class="screen">
+  <div class="topbar">
+    <button class="back" onclick="showScreen('screen-home')">←</button>
+    <h2>Resumos por Tema</h2>
+  </div>
+  <div class="scroll-content"><div class="topic-list" id="topics-list-2"></div></div>
+</div>
+
+<!-- TOPIC DETAIL -->
+<div id="screen-detail" class="screen">
+  <div class="topbar">
+    <button class="back" id="detail-back">←</button>
+    <h2 id="detail-title">Tema</h2>
+  </div>
+  <div class="resumo-body" id="detail-body"></div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="screen-flash" class="screen">
+  <div class="topbar">
+    <button class="back" onclick="showScreen('screen-home')">←</button>
+    <h2>Flashcards</h2>
+    <div class="badge" id="fc-topic-badge">Todos</div>
+  </div>
+  <div class="filter-tabs" id="fc-filter-tabs"></div>
+  <div class="fc-wrap">
+    <div class="fc-prog"><div class="fc-prog-fill" id="fc-prog-fill" style="width:0%"></div></div>
+    <div class="fc-counter" id="fc-counter">1 / 1</div>
+    <div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-label" id="fc-label">tema</div>
+      <div class="fc-q" id="fc-q">—</div>
+      <div class="fc-a" id="fc-a">—</div>
+      <div class="fc-tap" id="fc-tap">toque para revelar</div>
+    </div>
+    <div class="fc-actions" id="fc-actions-rate" style="display:none">
+      <button class="fc-btn wrong" onclick="rateCard(false)">✗ Errei</button>
+      <button class="fc-btn right" onclick="rateCard(true)">✓ Acertei</button>
+    </div>
+    <div class="fc-actions" id="fc-actions-next" style="display:none">
+      <button class="fc-btn next" onclick="nextCard()">Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="topbar">
+    <button class="back" onclick="showScreen('screen-home')">←</button>
+    <h2>Quiz</h2>
+    <div class="badge" id="quiz-badge">0/0</div>
+  </div>
+  <div class="filter-tabs" id="quiz-filter-tabs"></div>
+  <div class="quiz-wrap" id="quiz-wrap"></div>
+</div>
+
+<!-- LÓGICA INTERATIVA -->
+<div id="screen-logic" class="screen">
+  <div class="topbar">
+    <button class="back" onclick="showScreen('screen-home')">←</button>
+    <h2>Lógica Proposicional</h2>
+  </div>
+  <div class="resumo-body" id="logic-body"></div>
+</div>
+
+</div><!-- #app -->
+<script>
+// ════════════════════════════════════════════════════════
+//  TOPICS DATA
+// ════════════════════════════════════════════════════════
+const TOPICS = [
+  // ── LÓGICA (PESO ALTO - 5 questões de raciocínio)
+  { id:"logica", icon:"🧠", name:"Raciocínio Lógico", sub:"Conectivos · Tabela Verdade · Silogismo", cat:"logica", resumo:[
+    { h:"Proposições", p:"Uma proposição é uma sentença declarativa que pode ser VERDADEIRA ou FALSA (não ambas). Frases interrogativas, exclamativas ou imperativas NÃO são proposições." },
+    { h:"Conectivos lógicos", p:"", list:[
+      "¬ (NÃO / negação): inverte o valor lógico",
+      "∧ (E / conjunção): V só se AMBOS forem V",
+      "∨ (OU / disjunção inclusiva): F só se AMBOS forem F",
+      "→ (SE…ENTÃO / condicional): F apenas quando p=V e q=F",
+      "↔ (SE E SOMENTE SE / bicondicional): V quando p e q têm mesmo valor"
+    ]},
+    { h:"Condicional — a mais cobrada!", p:"p → q  (se p então q)", code:"p=V, q=V → VERDADEIRO\np=V, q=F → FALSO  ← único caso falso!\np=F, q=V → VERDADEIRO\np=F, q=F → VERDADEIRO\n\nMacete: condicional só é FALSA quando a\nhipótese é verdadeira e a conclusão é falsa." },
+    { h:"Negação do condicional", code:"¬(p → q) ≡ p ∧ ¬q\nExemplo:\n'Se chove então leva guarda-chuva'\nNegação: 'Chove E não leva guarda-chuva'" },
+    { h:"Contrapositiva (equivalente ao original)", code:"p → q  ≡  ¬q → ¬p\nExemplo:\n'Se é mamífero → tem sangue quente'\nEquivale a: 'Se não tem sangue quente → não é mamífero'" },
+    { h:"Leis de De Morgan", code:"¬(p ∧ q) ≡ ¬p ∨ ¬q\n¬(p ∨ q) ≡ ¬p ∧ ¬q\n\nMacete: nega tudo e troca o conectivo (E↔OU)" },
+    { h:"Silogismo / Modus Ponens", code:"Se p → q  e  p é verdade\nEntão q é verdade\n\nExemplo:\n'Todo servidor público deve honestidade'\n'João é servidor público'\nConclusão: 'João deve honestidade'" },
+    { h:"Para a prova ⚠️", warn:true, p:"Foque em: valor do condicional, negação de proposições compostas, equivalências (contrapositiva), De Morgan. São os temas que mais caem em concursos de TI." }
+  ]},
+
+  // ── MATEMÁTICA (PESO ALTO - 10 questões)
+  { id:"matematica", icon:"📐", name:"Matemática", sub:"Porcentagem · Regra de 3 · Juros · Geometria", cat:"basico", resumo:[
+    { h:"Porcentagem — truques rápidos", p:"", list:[
+      "x% de N = (x/100) × N",
+      "Aumento de x%: multiplica por (1 + x/100)",
+      "Desconto de x%: multiplica por (1 − x/100)",
+      "Aumento seguido de desconto NÃO é zero: 10% up + 10% down = −1%"
+    ], code:"Ex: R$200 com 15% desconto\n200 × 0,85 = R$170" },
+    { h:"Regra de três simples", code:"Direta: mais ↔ mais / menos ↔ menos\nInversa: mais ↔ menos\n\nEx: 3 funcionários → 12 dias\n    5 funcionários → ? dias (inversa)\n3×12 = 5×x  →  x = 36/5 = 7,2 dias" },
+    { h:"Juros simples vs compostos", code:"Simples: J = C × i × t\n          M = C × (1 + i×t)\n\nCompostos: M = C × (1+i)^t\n\nEx simples: R$1000, 2% a.m., 3 meses\nJ = 1000×0,02×3 = R$60  → M=R$1060" },
+    { h:"MMC e MDC", p:"MMC: menor múltiplo comum — use para somar frações e resolver problemas de periodicidade. MDC: maior divisor comum — use para simplificar frações.", code:"MMC(4,6) = 12  |  MDC(12,8) = 4\n\nProblema tipo: dois ônibus saem juntos\née m intervalos de 20 e 30 min — quando\nvoltam a sair juntos? MMC(20,30)=60 min" },
+    { h:"Geometria básica", p:"", list:[
+      "Quadrado: A = L² | P = 4L",
+      "Retângulo: A = b×h | P = 2(b+h)",
+      "Triângulo: A = (b×h)/2",
+      "Círculo: A = π×r² | C = 2πr",
+      "Volume cubo: V = L³ | Paralelepípedo: V = c×l×a"
+    ]},
+    { h:"Sequências e PA/PG", code:"PA: aₙ = a₁ + (n−1)r  |  S = n(a₁+aₙ)/2\nPG: aₙ = a₁ × q^(n−1)\n\nEx PA: 2,5,8,11... → r=3, a₁₀ = 2+9×3 = 29" },
+    { h:"Para a prova ⚠️", warn:true, p:"Mais cobrados: porcentagem (aumentos/descontos encadeados), regra de três inversa, juros simples, problemas de MMC. Leve calculadora mental: 10%=÷10, 5%=÷20, 25%=÷4." }
+  ]},
+
+  // ── PORTUGUÊS (PESO ALTO - 10 questões)
+  { id:"portugues", icon:"📝", name:"Língua Portuguesa", sub:"Interpretação · Concordância · Coesão", cat:"basico", resumo:[
+    { h:"Interpretação de texto — estratégia", p:"", list:[
+      "Leia o enunciado da questão ANTES do texto",
+      "Sublinhe palavras-chave no texto",
+      "Desconfie de alternativas com 'sempre', 'nunca', 'apenas', 'somente' — geralmente erradas",
+      "A resposta certa é uma paráfrase do texto, não uma opinião"
+    ]},
+    { h:"Concordância verbal — regras principais", p:"", list:[
+      "Sujeito composto antes do verbo: verbo no plural",
+      "Sujeito composto pós-verbo: verbo concorda com o mais próximo (ou plural)",
+      "'Mais de um': verbo no singular. 'Mais de dois': plural",
+      "Coletivo + de + plural: verbo no singular ou plural"
+    ], code:"'A turma toda aplaudiu.' (coletivo → sing.)\n'Chegaram o diretor e a coordenadora.'" },
+    { h:"Crase — use com segurança", p:"", list:[
+      "SEMPRE: locuções adverbiais femininas (às vezes, à tarde, à medida que)",
+      "SEMPRE: antes de horas determinadas (às 8h, à meia-noite)",
+      "NUNCA: antes de verbos, pronomes pessoais, masculinos sem artigo",
+      "FACULTATIVO: antes de pronomes possessivos femininos (à/a sua casa)"
+    ], code:"Dica: substitua por 'ao' — se ficar bem, usa crase\nEx: 'Vou à praia' → 'Vou ao praia' ✗... \n    espera, 'Vou ao shopping' ✓ → 'ao' cabe → crase" },
+    { h:"Coesão e coerência", p:"", list:[
+      "Coesão: mecanismos linguísticos que ligam o texto (pronomes, conectivos, sinônimos)",
+      "Coerência: lógica e não contradição das ideias",
+      "Conectivos de adição: e, além disso, também, ainda",
+      "Conectivos de oposição: mas, porém, contudo, entretanto, todavia",
+      "Conectivos de causa/conclusão: porque, logo, portanto, assim"
+    ]},
+    { h:"Regência verbal — mais cobrados", code:"Assistir (ver): assistiu AO filme (a)\nVisar (objetivar): visa AO lucro (a)\nPreferir: prefiro X A Y (nunca 'do que')\nObedecer: obedece À lei (a)\nChegar/ir: cheguei AO trabalho (a)" },
+    { h:"Para a prova ⚠️", warn:true, p:"Foque em interpretação (40% das questões de port.) e concordância verbal. Crase cai bastante. Regência verbal vale revisar as mais comuns. Não perca tempo em morfologia detalhada." }
+  ]},
+
+  // ── REDES
+  { id:"redes", icon:"🌐", name:"Redes de Computadores", sub:"Protocolos · TCP/IP · Equipamentos", cat:"especifico", resumo:[
+    { h:"Modelo OSI — 7 camadas", p:"Macete: 'Por Favor, Não Teste Sistemas Apresentados Atrasados'", code:"7-Aplicação   (HTTP,FTP,SMTP,DNS)\n6-Apresentação (SSL/TLS,compressão)\n5-Sessão       (NetBIOS,RPC)\n4-Transporte   (TCP,UDP)\n3-Rede         (IP,ICMP,ARP)\n2-Enlace       (Ethernet,MAC,switch)\n1-Física       (cabos,hub,sinais)" },
+    { h:"TCP vs UDP", p:"", list:[
+      "TCP: orientado a conexão, handshake 3 vias (SYN→SYN-ACK→ACK), garante entrega, ordenado",
+      "UDP: sem conexão, sem garantia, mais rápido — DNS, DHCP, VoIP, streaming, jogos online"
+    ]},
+    { h:"Endereçamento IP e sub-redes", code:"Privados: 10.0.0.0/8 | 172.16.0.0/12 | 192.168.0.0/16\n\nCIDR rápido:\n/24 = 254 hosts (máscara .0)\n/25 = 126 hosts\n/26 = 62 hosts\n/27 = 30 hosts\n/30 = 2 hosts (ponto-a-ponto)" },
+    { h:"Equipamentos por camada OSI", p:"", list:[
+      "Camada 1 (Física): Hub, repetidor, cabo",
+      "Camada 2 (Enlace): Switch, bridge — decisão por MAC",
+      "Camada 3 (Rede): Roteador — decisão por IP",
+      "Camada 7: Firewall de aplicação, proxy, WAF"
+    ]},
+    { h:"Segurança de redes", p:"", list:[
+      "NAT: traduz IPs privados para público",
+      "VLAN: segmentação lógica da rede",
+      "Firewall stateful: rastreia estado das conexões",
+      "VPN: túnel criptografado sobre rede pública",
+      "WAF: protege aplicações web (camada 7)"
+    ]},
+    { h:"Portas importantes", code:"22-SSH | 23-Telnet | 25-SMTP | 53-DNS\n80-HTTP | 443-HTTPS | 3306-MySQL\n3389-RDP | 5432-PostgreSQL | 8080-HTTP alt" }
+  ]},
+
+  // ── ARMAZENAMENTO
+  { id:"armazenamento", icon:"💾", name:"Armazenamento & Backup", sub:"SAN · NAS · RAID · Backup", cat:"especifico", resumo:[
+    { h:"SAN vs NAS vs DAS", p:"", list:[
+      "SAN: rede dedicada, acesso em BLOCO (iSCSI, Fibre Channel) — bancos de dados, alta perf.",
+      "NAS: compartilhamento de ARQUIVOS (NFS, SMB/CIFS) — mais simples, uso geral",
+      "DAS: conectado direto ao servidor (USB, SATA) — sem compartilhamento em rede"
+    ]},
+    { h:"RAID — resumo rápido", p:"", list:[
+      "RAID 0: striping, ZERO redundância, mais rápido",
+      "RAID 1: espelhamento, 50% de aproveitamento",
+      "RAID 5: paridade distribuída, mín. 3 discos, tolera 1 falha — mais usado",
+      "RAID 6: 2 paridades, tolera 2 falhas, mín. 4 discos",
+      "RAID 10: espelho + stripe, alta perf. + redundância, mín. 4 discos"
+    ], code:"Aproveitamento RAID 5 com n discos:\ncapacidade = (n−1) × tamanho de 1 disco" },
+    { h:"Backup — tipos e diferença", p:"", list:[
+      "Full: copia tudo — mais lento, mais espaço, restauração mais simples",
+      "Incremental: só o que mudou desde o ÚLTIMO backup (qualquer tipo) — mais rápido",
+      "Diferencial: só o que mudou desde o ÚLTIMO FULL — restaura com full + 1 diferencial",
+      "Snapshot: cópia pontual (Copy-on-Write) — rápido, ocupa pouco inicialmente"
+    ], code:"Regra 3-2-1:\n3 cópias | 2 mídias diferentes | 1 offsite" },
+    { h:"Armazenamento objeto (S3)", p:"Protocolo S3 (Amazon). Acesso via HTTP/API REST. Ideal para dados não estruturados (imagens, logs, backups). Objetos armazenados em buckets com metadados." }
+  ]},
+
+  // ── SISTEMAS OPERACIONAIS
+  { id:"so", icon:"🖥️", name:"Sistemas Operacionais", sub:"Windows Server · Linux · AD · Cloud", cat:"especifico", resumo:[
+    { h:"Active Directory — estrutura", p:"", list:[
+      "Domain Controller (DC): autentica usuários e computadores",
+      "Floresta > Árvore > Domínio > OU (Organizational Unit)",
+      "GPO: políticas aplicadas a OUs (restrições, scripts, configurações)",
+      "Kerberos: protocolo de autenticação padrão no AD",
+      "LDAP: protocolo de consulta ao diretório (porta 389 / 636 TLS)"
+    ]},
+    { h:"Linux — comandos essenciais", code:"Arquivos: ls -la | cp | mv | rm -rf | find\nTexto: grep -r | cat | tail -f | awk | sed\nRede: ping | ss -tulnp | netstat | ip addr\nProcessos: ps aux | top | htop | kill -9\nSistema: df -h | du -sh | free -h | uptime\nServiços: systemctl start|stop|status|enable" },
+    { h:"Linux — permissões", code:"chmod 755 = rwxr-xr-x (dono tudo, resto lê/exec)\nchmod 644 = rw-r--r-- (dono lê/escreve, resto lê)\nchmod 600 = rw------- (só dono lê/escreve)\n\nchown user:grupo arquivo" },
+    { h:"Virtualização e Cloud", p:"", list:[
+      "Hypervisor Tipo 1 (bare-metal): ESXi, Hyper-V, Proxmox — direto no hardware",
+      "Hypervisor Tipo 2 (hosted): VirtualBox, VMware Workstation — sobre SO",
+      "IaaS: VMs, rede, storage (AWS EC2, Azure VM)",
+      "PaaS: plataforma para dev (Heroku, App Engine)",
+      "SaaS: software pronto (Gmail, Office 365)"
+    ]}
+  ]},
+
+  // ── CONTAINERS
+  { id:"containers", icon:"🐳", name:"Containers & Automação", sub:"Docker · Kubernetes · Ansible · CI/CD", cat:"especifico", resumo:[
+    { h:"Docker — essencial", p:"", list:[
+      "Imagem: template imutável (definido no Dockerfile)",
+      "Container: instância em execução — efêmero por padrão",
+      "Volume: persistência de dados além do ciclo do container",
+      "Docker Swarm: orquestração nativa e simples"
+    ], code:"docker run -d -p 80:80 --name web nginx\ndocker exec -it web bash\ndocker-compose up -d\ndocker logs -f container" },
+    { h:"Kubernetes — conceitos-chave", p:"", list:[
+      "Pod: menor unidade, 1+ containers, compartilham rede",
+      "Deployment: gerencia estado desejado (réplicas)",
+      "Service: expõe pods — ClusterIP, NodePort, LoadBalancer",
+      "ConfigMap / Secret: configurações e senhas",
+      "Namespace: isolamento lógico de recursos",
+      "kubectl: CLI principal do K8s"
+    ]},
+    { h:"Ansible — automação", code:"Agentless: usa SSH, sem instalar agente\nPlaybook: arquivo YAML com tasks\nInventory: lista de hosts gerenciados\nRole: conjunto reutilizável de tarefas\n\nansible-playbook -i hosts deploy.yml" },
+    { h:"CI/CD Pipeline", p:"", list:[
+      "CI (Integração Contínua): build + testes automáticos a cada commit",
+      "CD (Entrega Contínua): deploy automático após testes passarem",
+      "GitLab CI: .gitlab-ci.yml define stages (build→test→deploy)",
+      "Stages típicos: lint → unit test → build → staging → production"
+    ]}
+  ]},
+
+  // ── SEGURANÇA
+  { id:"seguranca", icon:"🔒", name:"Segurança da Informação", sub:"Criptografia · GRC · Ameaças · LGPD", cat:"especifico", resumo:[
+    { h:"Pilares — CID + extras", code:"C — Confidencialidade: só quem deve acessa\nI — Integridade: dados não adulterados\nD — Disponibilidade: sistema acessível\n+ Autenticidade e Não-repúdio" },
+    { h:"Criptografia", p:"", list:[
+      "Simétrica: 1 chave (AES-256, 3DES) — rápida, usada em dados em massa",
+      "Assimétrica: par pública/privada (RSA, ECC) — troca de chaves, assinatura digital",
+      "Hash: unidirecional, sem decifração (SHA-256, SHA-3) — integridade",
+      "HTTPS/TLS: assimétrica no handshake, simétrica na sessão"
+    ]},
+    { h:"Ameaças principais", p:"", list:[
+      "Ransomware: criptografa dados e pede resgate",
+      "Phishing: engenharia social por e-mail/SMS",
+      "DDoS: inunda o servidor com tráfego falso",
+      "SQL Injection: insere comandos SQL em formulários",
+      "MITM (Man-in-the-Middle): intercepta comunicação"
+    ]},
+    { h:"Controles de acesso", p:"", list:[
+      "RBAC: Role-Based — permissões por papel/perfil",
+      "ABAC: Attribute-Based — condições complexas",
+      "MFA: múltiplos fatores (senha + token + biometria)",
+      "Zero Trust: nunca confie, sempre verifique"
+    ]},
+    { h:"LGPD — pontos principais", p:"", list:[
+      "Lei 13.709/2018 — vigente desde set/2020",
+      "Dado sensível: saúde, biometria, raça, religião, política",
+      "Controlador: decide finalidade e meios do tratamento",
+      "Operador: processa em nome do controlador",
+      "Titular: tem direito de acesso, correção, exclusão, portabilidade",
+      "ANPD: autoridade nacional fiscalizadora"
+    ]}
+  ]},
+
+  // ── GOVERNANÇA
+  { id:"governanca", icon:"📋", name:"Governança de TI", sub:"ITIL v4 · COBIT · Projetos", cat:"especifico", resumo:[
+    { h:"ITIL v4 — práticas essenciais", p:"", list:[
+      "Incident Management: restaurar serviço RÁPIDO (não busca causa-raiz)",
+      "Problem Management: elimina causa-raiz (RCA) — evita recorrência",
+      "Change Enablement: avalia e controla mudanças (CAB)",
+      "Service Desk: ponto único de contato (SPOC)",
+      "CMDB: banco de dados de itens de configuração (CIs)"
+    ], code:"SLI: métrica real medida\nSLO: objetivo interno\nSLA: contrato com cliente (tem penalidades)" },
+    { h:"COBIT — alinhamento TI-negócio", p:"Framework de governança. Cascata de metas: negócio → TI → processos → atividades. Domínios: APO (Align), BAI (Build), DSS (Deliver), MEA (Monitor)." },
+    { h:"Gestão de Projetos", p:"", list:[
+      "PMBOK: 5 grupos — Iniciação, Planejamento, Execução, M&C, Encerramento",
+      "EAP/WBS: decomposição do escopo em pacotes de trabalho",
+      "Caminho crítico: sequência mais longa, sem folga",
+      "PMO: escritório de projetos — padroniza e suporta"
+    ]}
+  ]},
+
+  // ── DATACENTER
+  { id:"datacenter", icon:"🏢", name:"Datacenter & Serviços", sub:"Tiers · DNS · Web · Monitoramento", cat:"especifico", resumo:[
+    { h:"Tiers (TIA-942)", p:"", list:[
+      "Tier I: 99,671% uptime — sem redundância",
+      "Tier II: componentes redundantes — 99,741%",
+      "Tier III: manutenção sem parar serviços (N+1) — 99,982%",
+      "Tier IV: tolerante a falhas (2N) — 99,995%"
+    ]},
+    { h:"DNS — registros essenciais", code:"A     → domínio para IPv4\nAAAA  → domínio para IPv6\nCNAME → alias (apelido) para outro nome\nMX    → servidor de e-mail\nTXT   → verificações (SPF, DKIM, DMARC)\nPTR   → IPv4 para domínio (reverso)\nNS    → servidores autoritativos do domínio" },
+    { h:"Web e proxy", p:"", list:[
+      "Nginx: alta performance, proxy reverso, load balancer",
+      "Apache: .htaccess, módulos, virtual hosts",
+      "Proxy reverso: expõe serviços internos com segurança",
+      "Load Balancer: round-robin, least-connections, IP hash"
+    ]},
+    { h:"Monitoramento", p:"", list:[
+      "Prometheus + Grafana: métricas e dashboards",
+      "ELK Stack: logs (Elasticsearch + Logstash + Kibana)",
+      "Zabbix/Nagios: alertas e disponibilidade",
+      "APM: monitoramento de performance de aplicação"
+    ]}
+  ]},
+
+  // ── NOÇÕES BÁSICAS
+  { id:"direito", icon:"⚖️", name:"Dir. Constitucional & Adm.", sub:"Princípios · Atos Adm. · Licitação", cat:"basico", resumo:[
+    { h:"Princípios da Adm. Pública — LIMPE", code:"L — Legalidade: só faz o que a lei permite\nI — Impessoalidade: sem favoritismo\nM — Moralidade: ética e boa-fé\nP — Publicidade: transparência\nE — Eficiência: melhor resultado com menos recursos" },
+    { h:"Atos administrativos — atributos", p:"", list:[
+      "Presunção de legitimidade: presume-se legal até prova contrária",
+      "Imperatividade: impõe obrigações independente de concordância",
+      "Autoexecutoriedade: executa sem precisar do judiciário",
+      "Tipicidade: deve ter previsão em lei"
+    ]},
+    { h:"Licitação (Lei 14.133/2021)", p:"", list:[
+      "Modalidades: Pregão (bens/serviços comuns), Concorrência, Concurso, Leilão, Diálogo Competitivo",
+      "Dispensa: valores baixos, emergência, outros casos taxativos",
+      "Inexigibilidade: fornecedor exclusivo, serviço técnico especializado",
+      "Pregão eletrônico: mais usado em TI"
+    ]},
+    { h:"Direitos fundamentais — CF/88", p:"Art. 5º — inviolabilidade da vida, liberdade, igualdade, segurança e propriedade. Servidores públicos: art. 37 (LIMPE), cargo efetivo por concurso público.", warn:false }
+  ]},
+
+  { id:"admpublica", icon:"🏛️", name:"Administração Pública", sub:"Planejamento · Orçamento · Gestão", cat:"basico", resumo:[
+    { h:"Ciclo PDCA", code:"P — Plan: planejamento\nD — Do: execução\nC — Check: verificação\nA — Act: ação corretiva\n(Melhoria contínua)" },
+    { h:"Instrumentos orçamentários", p:"", list:[
+      "PPA: Plano Plurianual — 4 anos, metas e programas",
+      "LDO: Lei de Diretrizes Orçamentárias — regras para o ano seguinte",
+      "LOA: Lei Orçamentária Anual — prevê receitas e fixa despesas"
+    ], code:"Hierarquia: PPA → LDO → LOA" },
+    { h:"Governança pública", p:"", list:[
+      "Accountability: prestação de contas e responsabilização",
+      "Transparência: acesso à informação (Lei 12.527/2011)",
+      "Gestão por resultados: foco em entregas e indicadores",
+      "Gestão por competências: capacitar conforme perfil do cargo"
+    ]}
+  ]},
+
+  { id:"legislacao", icon:"📜", name:"Legislação Municipal", sub:"Estatuto · Plano Diretor · Código Ética", cat:"basico", resumo:[
+    { h:"Estatuto dos Servidores — Lei 2.994/1982", p:"", list:[
+      "Regime estatutário (não CLT)",
+      "Estabilidade após 3 anos de efetivo exercício",
+      "Carga horária: 40h semanais",
+      "Deveres: assiduidade, pontualidade, urbanidade, sigilo",
+      "Proibições: uso indevido do cargo, receber vantagens indevidas"
+    ]},
+    { h:"Código de Ética — Decreto 16.559/2015", p:"", list:[
+      "Princípios: dignidade, decoro, probidade, eficiência",
+      "Comissão de Ética: órgão de consulta e orientação",
+      "Vedações: uso de informação privilegiada, conflito de interesses"
+    ]},
+    { h:"Plano Diretor — Lei 9.271/2018", p:"Lei que organiza o desenvolvimento urbano de Vitória. Define zoneamento, uso do solo, áreas de preservação, mobilidade urbana. Código de Edificações (Lei 4.821/1998) e Código de Posturas (Lei 6.080/2003) regulam construções e atividades urbanas." },
+    { h:"Processo eletrônico — Decreto 19.930/2021", p:"Regulamenta o uso do meio eletrônico para processos administrativos da PMV. SEI (Sistema Eletrônico de Informações) como plataforma. Documentos digitais têm validade jurídica." }
+  ]}
+];
+
+// ════════════════════════════════════════════════════════
+//  FLASHCARDS
+// ════════════════════════════════════════════════════════
+const FLASHCARDS = [
+  // LÓGICA
+  {topic:"logica", q:"Quando o condicional p → q é FALSO?", a:"Apenas quando p é VERDADEIRO e q é FALSO. Nos outros 3 casos o condicional é verdadeiro. Macete: mentira = prometer e não cumprir."},
+  {topic:"logica", q:"Qual a contrapositiva de 'Se chove (p), então está nublado (q)'?", a:"'Se não está nublado (¬q), então não chove (¬p)'. Contrapositiva: ¬q → ¬p. É logicamente equivalente ao original."},
+  {topic:"logica", q:"Aplique De Morgan: ¬(p ∧ q) = ?", a:"¬p ∨ ¬q. Nega tudo e troca o conectivo: E vira OU. Também: ¬(p ∨ q) = ¬p ∧ ¬q (OU vira E)."},
+  {topic:"logica", q:"Qual a negação de 'Se trabalha então é feliz'?", a:"'Trabalha E não é feliz' — p ∧ ¬q. Negação do condicional (p→q) é sempre (p ∧ ¬q)."},
+  {topic:"logica", q:"A proposição 'p OU q' (disjunção) é falsa quando?", a:"Apenas quando AMBAS p e q são falsas. Basta uma ser verdadeira para o 'ou' ser verdadeiro."},
+  {topic:"logica", q:"O que é Modus Ponens?", a:"Se p→q é verdade e p é verdade, então q é verdade. Exemplo: 'Todo servidor deve probidade' + 'Ana é servidora' → 'Ana deve probidade'."},
+  // MATEMÁTICA
+  {topic:"matematica", q:"Um produto custava R$500. Teve 20% de aumento e depois 20% de desconto. Qual o preço final?", a:"500 × 1,20 = 600. Depois: 600 × 0,80 = R$480. Não voltou ao preço original! Aumento e desconto iguais = perda líquida de 4%."},
+  {topic:"matematica", q:"Fórmula do juro simples — Montante.", a:"M = C × (1 + i × t). Onde C=capital, i=taxa no período, t=tempo. Ex: R$2000 a 3% a.m. por 4 meses: M = 2000 × (1 + 0,03×4) = 2000 × 1,12 = R$2.240."},
+  {topic:"matematica", q:"3 máquinas produzem 300 peças em 10 dias. Quantas peças 5 máquinas produzem em 6 dias?", a:"Regra de três composta: (5/3) × (6/10) × 300 = 300 peças. Mais máquinas → mais peças (direta). Menos dias → menos peças (direta)."},
+  {topic:"matematica", q:"Qual o MMC de 12, 18 e 24?", a:"MMC(12,18,24) = 72. Decompõe: 12=2²×3, 18=2×3², 24=2³×3. MMC = 2³×3² = 8×9 = 72."},
+  // PORTUGUÊS
+  {topic:"portugues", q:"'Mais de um servidor faltou ou faltaram?'", a:"'Faltou' — singular. 'Mais de um' exige verbo no singular. 'Mais de dois/três...' exige plural."},
+  {topic:"portugues", q:"'Vou __ escola às 8h.' — usa crase?", a:"'Vou À escola às 8h.' — crase antes de 'escola' (feminino com artigo). E 'às 8h' também tem crase (hora determinada)."},
+  {topic:"portugues", q:"Qual o conectivo de conclusão mais cobrado em provas?", a:"'Portanto', 'logo', 'assim', 'por isso', 'consequentemente'. São conectivos conclusivos — indicam decorrência do que foi dito antes."},
+  {topic:"portugues", q:"'Prefiro café do que chá' — está correto?", a:"Não. O correto é 'Prefiro café A chá'. O verbo preferir exige 'a' como conectivo, nunca 'do que' ou 'mais do que'."},
+  // REDES
+  {topic:"redes", q:"Em qual camada do modelo OSI o switch opera?", a:"Camada 2 (Enlace de Dados) — decide o encaminhamento pelo endereço MAC. O roteador opera na Camada 3 (Rede), decidindo pelo IP."},
+  {topic:"redes", q:"Qual a diferença entre TCP e UDP?", a:"TCP: confiável, orientado a conexão, handshake 3 vias, garante entrega e ordem. UDP: sem conexão, sem garantia, mais rápido — DNS, VoIP, streaming."},
+  {topic:"redes", q:"Quantos hosts úteis cabem numa rede /26?", a:"62 hosts (2⁶=64 IPs, menos rede e broadcast). Máscara: 255.255.255.192."},
+  // ARMAZENAMENTO
+  {topic:"armazenamento", q:"Qual RAID tolera falha de 1 disco com melhor aproveitamento de espaço?", a:"RAID 5. Com n discos, capacidade = (n−1) × 1 disco. Tolera exatamente 1 falha. Mínimo 3 discos."},
+  {topic:"armazenamento", q:"Diferença entre backup incremental e diferencial?", a:"Incremental: copia só o que mudou desde o último backup (qualquer tipo) — mais rápido. Diferencial: copia tudo desde o último FULL. Restaurar diferencial é mais rápido (full + 1 diff)."},
+  // CONTAINERS
+  {topic:"containers", q:"O que diferencia imagem de container no Docker?", a:"Imagem: template imutável (Dockerfile). Container: instância em execução, efêmera. Containers podem ser destruídos e recriados da mesma imagem."},
+  {topic:"containers", q:"O que é um Pod no Kubernetes?", a:"Menor unidade do K8s. Contém 1 ou mais containers que compartilham rede (localhost) e volumes. É efêmero — controlado por Deployment."},
+  // SEGURANÇA
+  {topic:"seguranca", q:"Quais os 3 pilares do CID?", a:"Confidencialidade (só acessa quem deve), Integridade (dados íntegros, sem adulteração), Disponibilidade (sistema acessível quando necessário)."},
+  {topic:"seguranca", q:"O que é RBAC?", a:"Role-Based Access Control — controle de acesso por papéis. Usuário herda permissões do papel. Mais simples que ABAC (baseado em atributos)."},
+  // GOVERNANÇA
+  {topic:"governanca", q:"Qual a diferença entre Incident e Problem Management no ITIL?", a:"Incident: restaura o serviço O MAIS RÁPIDO possível (foco na velocidade). Problem: investiga e elimina a CAUSA-RAIZ (foco em prevenir recorrência)."},
+  // DIREITO
+  {topic:"direito", q:"Quais os 5 princípios da Administração Pública? (LIMPE)", a:"Legalidade, Impessoalidade, Moralidade, Publicidade, Eficiência. Art. 37 da CF/88."},
+  // ADM
+  {topic:"admpublica", q:"Qual a hierarquia dos instrumentos orçamentários?", a:"PPA (4 anos, diretrizes e metas) → LDO (regras para o ano seguinte) → LOA (orçamento anual com receitas e despesas)."},
+  // LEGISLAÇÃO
+  {topic:"legislacao", q:"Qual o regime jurídico dos servidores de Vitória?", a:"Regime estatutário, previsto na Lei 2.994/1982. NÃO é CLT. Estabilidade após 3 anos de efetivo exercício."}
+];
+
+// ════════════════════════════════════════════════════════
+//  QUIZ QUESTIONS
+// ════════════════════════════════════════════════════════
+const QUIZ = [
+  {topic:"logica", q:"Dada a proposição: 'Se o servidor tem nível superior (p), então recebe gratificação (q)'. Em qual situação essa proposição é FALSA?",
+   opts:["p falso e q verdadeiro","p falso e q falso","p verdadeiro e q verdadeiro","p verdadeiro e q falso"],
+   correct:3, explain:"O condicional p→q só é FALSO quando p=V e q=F (promessa cumprida pela metade). Nos outros 3 casos é verdadeiro."},
+  {topic:"logica", q:"Qual é a contrapositiva de 'Se p então q'?",
+   opts:["Se q então p","Se ¬p então ¬q","Se ¬q então ¬p","¬p ou q"],
+   correct:2, explain:"Contrapositiva: ¬q → ¬p. Equivalente lógico do original. Troca a ordem E nega ambas. Diferente da recíproca (q→p) que não é equivalente."},
+  {topic:"logica", q:"Pela Lei de De Morgan, ¬(p ∧ q) é equivalente a:",
+   opts:["¬p ∧ ¬q","¬p ∨ ¬q","p ∨ ¬q","¬p ∨ q"],
+   correct:1, explain:"De Morgan: nega tudo e troca o conectivo. ¬(p∧q) = ¬p∨¬q. ¬(p∨q) = ¬p∧¬q. Macete: 'nega e troca E↔OU'."},
+  {topic:"matematica", q:"Um produto sofreu aumento de 25% e depois desconto de 20%. O preço final em relação ao original é:",
+   opts:["Igual","5% maior","5% menor","10% menor"],
+   correct:0, explain:"1,25 × 0,80 = 1,00. Exatamente igual! Aumento de 25% e desconto de 20% se cancelam. (1+0,25)×(1−0,20) = 1,00."},
+  {topic:"matematica", q:"Capital de R$5.000, taxa de 2% a.m., prazo de 6 meses (juros simples). O montante é:",
+   opts:["R$5.500","R$5.600","R$5.060","R$5.120"],
+   correct:1, explain:"M = C×(1+i×t) = 5000×(1+0,02×6) = 5000×1,12 = R$5.600."},
+  {topic:"portugues", q:"Assinale a frase com crase CORRETA:",
+   opts:["Vou á praia amanhã.","Refiro-me à questão anterior.","Ele aspira à um cargo público.","À nível nacional, os dados são preocupantes."],
+   correct:1, explain:"'Refiro-me à questão' = correto (verbo 'referir-se' rege 'a' + artigo feminino). Opção A: acento errado. C: 'à um' = errado (artigo 'um' não aceita crase). D: 'a nível' não tem crase (locução adverbial masculina)."},
+  {topic:"redes", q:"Qual protocolo opera na Camada 3 do modelo OSI e é responsável pelo roteamento?",
+   opts:["Ethernet","TCP","IP","HTTP"],
+   correct:2, explain:"IP (Internet Protocol) opera na Camada 3 (Rede), responsável pelo endereçamento lógico e roteamento. Ethernet é camada 2. TCP é camada 4. HTTP é camada 7."},
+  {topic:"armazenamento", q:"Qual tipo de RAID usa paridade distribuída, tolera falha de 1 disco e requer mínimo 3 discos?",
+   opts:["RAID 0","RAID 1","RAID 5","RAID 6"],
+   correct:2, explain:"RAID 5: paridade distribuída entre todos os discos, tolera exatamente 1 falha. Espaço = (n−1) discos. RAID 6 tolera 2 falhas. RAID 0 não tem redundância. RAID 1 é espelhamento."},
+  {topic:"so", q:"Qual tipo de Hypervisor é instalado diretamente no hardware sem sistema operacional host?",
+   opts:["Tipo 2","Tipo 3","Tipo 1","Hosted"],
+   correct:2, explain:"Hypervisor Tipo 1 (bare-metal): instala direto no hardware (VMware ESXi, Hyper-V, Proxmox). Tipo 2 (hosted) roda sobre um SO existente (VirtualBox). Tipo 1 tem melhor performance."},
+  {topic:"containers", q:"No Kubernetes, qual objeto declara o estado desejado (ex: 3 réplicas de um Pod)?",
+   opts:["Service","Namespace","ConfigMap","Deployment"],
+   correct:3, explain:"Deployment declara o estado desejado e o ReplicaSet garante que o número de réplicas seja mantido, recriando Pods que falham."},
+  {topic:"seguranca", q:"Na LGPD, quem é o responsável por DECIDIR a finalidade e os meios do tratamento de dados?",
+   opts:["Operador","Titular","ANPD","Controlador"],
+   correct:3, explain:"Controlador: decide PARA QUÊ e COMO os dados serão tratados. Operador: processa em nome do controlador. Titular: dono dos dados. ANPD: autoridade fiscalizadora."},
+  {topic:"direito", q:"O princípio da Administração Pública que determina que o agente público só pode fazer o que a lei PERMITE é:",
+   opts:["Moralidade","Eficiência","Legalidade","Impessoalidade"],
+   correct:2, explain:"Legalidade: na Adm. Pública o gestor só pode agir conforme a lei autoriza (diferente do particular, que pode tudo que a lei não proíbe). Art. 37, CF/88."},
+  {topic:"governanca", q:"No ITIL v4, qual prática tem como objetivo PRINCIPAL restaurar o serviço interrompido o mais rápido possível?",
+   opts:["Problem Management","Change Enablement","Service Desk","Incident Management"],
+   correct:3, explain:"Incident Management: foco em velocidade de restauração. Problem Management busca a causa-raiz. São práticas distintas com objetivos diferentes!"},
+  {topic:"admpublica", q:"A sigla PPA na gestão pública significa:",
+   opts:["Plano Público de Ação","Programa de Parceria Administrativa","Plano Plurianual","Planejamento e Programação Anual"],
+   correct:2, explain:"PPA (Plano Plurianual): planejamento de 4 anos do governo, com programas, metas e ações. É hierarquicamente superior à LDO e à LOA."}
+];
+
+// ════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════
+let progress = JSON.parse(localStorage.getItem("ati_v2_prog") || "{}");
+function saveProgress() { localStorage.setItem("ati_v2_prog", JSON.stringify(progress)); }
+
+let fcDeck = [], fcIndex = 0, fcCorrect = 0, fcFlipped = false, fcFilter = "all";
+let quizDeck = [], quizIndex = 0, quizScore = 0, quizAnswered = false, quizFilter = "all";
+
+const CAT_LABELS = {all:"Todos", especifico:"Específico", basico:"Básicos", logica:"Lógica"};
+
+// ════════════════════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if (id === "screen-home") renderHome();
+  if (id === "screen-flash") { buildFilterTabs("fc-filter-tabs", fcFilter, setFcFilter); initFlash(); }
+  if (id === "screen-quiz")  { buildFilterTabs("quiz-filter-tabs", quizFilter, setQuizFilter); initQuiz(); }
+  if (id === "screen-topics") renderTopicsList();
+  if (id === "screen-logic") renderLogic();
+}
+
+// ════════════════════════════════════════════════════════
+//  HOME
+// ════════════════════════════════════════════════════════
+function renderHome() {
+  const total = FLASHCARDS.length;
+  const done = Object.values(progress).filter(Boolean).length;
+  const pct = Math.round(done / total * 100);
+  document.getElementById("global-prog").style.width = pct + "%";
+  document.getElementById("global-pct").textContent = pct + "%";
+
+  document.getElementById("topic-list").innerHTML = TOPICS.map(t => topicItemHTML(t, "screen-home")).join("");
+}
+
+function topicItemHTML(t, from) {
+  const cards = FLASHCARDS.filter(c => c.topic === t.id);
+  const done = cards.filter(c => progress["fc_" + t.id + "_" + c.q.slice(0,8)]).length;
+  const dc = done === 0 ? "dot-none" : done === cards.length ? "dot-done" : "dot-partial";
+  const catClass = {especifico:"cat-especifico", basico:"cat-basico", logica:"cat-logica"}[t.cat] || "cat-basico";
+  const catLabel = {especifico:"INFRA", basico:"BÁSICO", logica:"LÓGICA"}[t.cat] || "";
+  return `<div class="topic-item" onclick="openTopic('${t.id}','${from}')">
+    <div class="t-icon">${t.icon}</div>
+    <div class="t-info">
+      <div class="t-name">${t.name}</div>
+      <div class="t-sub">${t.sub}</div>
+    </div>
+    <div class="t-right">
+      <span class="cat-badge ${catClass}">${catLabel}</span>
+      <div class="t-dot ${dc}"></div>
+      <div class="t-arrow">›</div>
+    </div>
+  </div>`;
+}
+
+function renderTopicsList() {
+  document.getElementById("topics-list-2").innerHTML = TOPICS.map(t => topicItemHTML(t, "screen-topics")).join("");
+}
+
+// ════════════════════════════════════════════════════════
+//  TOPIC DETAIL
+// ════════════════════════════════════════════════════════
+function openTopic(id, from) {
+  const topic = TOPICS.find(t => t.id === id);
+  document.getElementById("detail-title").textContent = topic.name;
+  document.getElementById("detail-back").onclick = () => showScreen(from);
+
+  let html = "";
+  topic.resumo.forEach(sec => {
+    html += `<div class="resumo-section"><h3>${sec.h}</h3>`;
+    if (sec.p) {
+      const cls = sec.warn ? "warn" : sec.ok ? "ok" : "";
+      html += cls ? `<div class="${cls}">${sec.p}</div>` : `<p>${sec.p}</p>`;
+    }
+    if (sec.list) html += `<ul>${sec.list.map(l => `<li>${l}</li>`).join("")}</ul>`;
+    if (sec.code) html += `<div class="highlight">${sec.code.replace(/\n/g,"<br>")}</div>`;
+    html += "</div>";
+  });
+
+  document.getElementById("detail-body").innerHTML = html;
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-detail").classList.add("active");
+}
+
+// ════════════════════════════════════════════════════════
+//  FILTER TABS
+// ════════════════════════════════════════════════════════
+function buildFilterTabs(containerId, activeFilter, setFn) {
+  const cats = ["all", ...new Set(TOPICS.map(t => t.cat))];
+  document.getElementById(containerId).innerHTML = cats.map(c =>
+    `<div class="ftab${activeFilter===c?" active":""}" onclick="${setFn.name}('${c}')">${CAT_LABELS[c]||c}</div>`
+  ).join("");
+}
+
+function setFcFilter(cat) { fcFilter = cat; buildFilterTabs("fc-filter-tabs", fcFilter, setFcFilter); initFlash(); }
+function setQuizFilter(cat) { quizFilter = cat; buildFilterTabs("quiz-filter-tabs", quizFilter, setQuizFilter); initQuiz(); }
+
+function getFilteredCards() {
+  if (fcFilter === "all") return [...FLASHCARDS];
+  const ids = TOPICS.filter(t => t.cat === fcFilter).map(t => t.id);
+  return FLASHCARDS.filter(c => ids.includes(c.topic));
+}
+function getFilteredQuiz() {
+  if (quizFilter === "all") return [...QUIZ];
+  const ids = TOPICS.filter(t => t.cat === quizFilter).map(t => t.id);
+  return QUIZ.filter(q => ids.includes(q.topic));
+}
+
+// ════════════════════════════════════════════════════════
+//  FLASHCARDS
+// ════════════════════════════════════════════════════════
+function initFlash() {
+  fcDeck = getFilteredCards().sort(() => Math.random() - .5);
+  fcIndex = 0; fcCorrect = 0; fcFlipped = false;
+  renderCard();
+}
+
+function renderCard() {
+  const card_el = document.getElementById("fc-card");
+  if (fcIndex >= fcDeck.length) {
+    card_el.innerHTML = `<div class="fc-label">CONCLUÍDO 🎉</div>
+      <div class="fc-q">${fcCorrect}/${fcDeck.length} acertos (${Math.round(fcCorrect/fcDeck.length*100)}%)</div>
+      <div class="fc-tap" style="color:var(--accent);margin-top:16px" onclick="initFlash()">↺ Embaralhar de novo</div>`;
+    document.getElementById("fc-actions-rate").style.display = "none";
+    document.getElementById("fc-actions-next").style.display = "none";
+    return;
+  }
+  const card = fcDeck[fcIndex];
+  const topic = TOPICS.find(t => t.id === card.topic);
+  document.getElementById("fc-label").textContent = topic ? topic.icon + " " + topic.name : card.topic;
+  document.getElementById("fc-q").textContent = card.q;
+  document.getElementById("fc-a").textContent = card.a;
+  document.getElementById("fc-a").style.display = "none";
+  card_el.classList.remove("flipped");
+  document.getElementById("fc-tap").style.display = "block";
+  document.getElementById("fc-counter").textContent = `${fcIndex+1} / ${fcDeck.length}`;
+  document.getElementById("fc-prog-fill").style.width = (fcIndex/fcDeck.length*100) + "%";
+  document.getElementById("fc-topic-badge").textContent = (topic ? topic.icon : "") + " " + (fcIndex+1) + "/" + fcDeck.length;
+  document.getElementById("fc-actions-rate").style.display = "none";
+  document.getElementById("fc-actions-next").style.display = "none";
+  fcFlipped = false;
+}
+
+function flipCard() {
+  if (fcFlipped) return;
+  fcFlipped = true;
+  document.getElementById("fc-card").classList.add("flipped");
+  document.getElementById("fc-a").style.display = "block";
+  document.getElementById("fc-tap").style.display = "none";
+  document.getElementById("fc-actions-rate").style.display = "flex";
+}
+
+function rateCard(correct) {
+  const card = fcDeck[fcIndex];
+  progress["fc_" + card.topic + "_" + card.q.slice(0,8)] = correct;
+  saveProgress();
+  if (correct) fcCorrect++;
+  fcIndex++;
+  renderCard();
+}
+function nextCard() { fcIndex++; renderCard(); }
+
+// ════════════════════════════════════════════════════════
+//  QUIZ
+// ════════════════════════════════════════════════════════
+function initQuiz() {
+  quizDeck = getFilteredQuiz().sort(() => Math.random() - .5);
+  quizIndex = 0; quizScore = 0; quizAnswered = false;
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const wrap = document.getElementById("quiz-wrap");
+  if (quizIndex >= quizDeck.length) {
+    const pct = Math.round(quizScore/quizDeck.length*100);
+    const color = pct>=70?"var(--green)":pct>=50?"var(--yellow)":"var(--red)";
+    const msg = pct>=70?"🎉 Ótimo!":pct>=50?"📚 Continue estudando!":"💪 Revise os resumos!";
+    wrap.innerHTML = `<div class="quiz-score">
+      <div class="score-big" style="color:${color}">${pct}%</div>
+      <div class="score-label">${quizScore} de ${quizDeck.length} corretas</div>
+      <div class="score-label">${msg}</div>
+      <button class="quiz-restart" onclick="initQuiz()">↺ Novo quiz</button>
+    </div>`;
+    document.getElementById("quiz-badge").textContent = quizScore+"/"+quizDeck.length;
+    return;
+  }
+  const q = quizDeck[quizIndex];
+  const topic = TOPICS.find(t => t.id === q.topic);
+  document.getElementById("quiz-badge").textContent = (quizIndex+1)+"/"+quizDeck.length;
+  quizAnswered = false;
+  wrap.innerHTML = `
+    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px">${topic?topic.icon+" "+topic.name:""}</div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-opts">${q.opts.map((o,i)=>`
+      <div class="quiz-opt" id="opt-${i}" onclick="answerQuiz(${i})">
+        <span class="opt-letter">${"ABCD"[i]}</span><span>${o}</span>
+      </div>`).join("")}
+    </div>
+    <div class="quiz-explain" id="quiz-explain">${q.explain}</div>
+    <button class="quiz-next" id="quiz-next" onclick="nextQuizQ()">Próxima →</button>`;
+}
+
+function answerQuiz(idx) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = quizDeck[quizIndex];
+  document.querySelectorAll(".quiz-opt").forEach((o,i) => {
+    o.classList.add("disabled");
+    if (i === q.correct) o.classList.add("correct");
+    else if (i === idx) o.classList.add("wrong");
+  });
+  if (idx === q.correct) quizScore++;
+  document.getElementById("quiz-explain").classList.add("show");
+  document.getElementById("quiz-next").classList.add("show");
+}
+function nextQuizQ() { quizIndex++; renderQuizQuestion(); }
+
+// ════════════════════════════════════════════════════════
+//  LÓGICA INTERATIVA
+// ════════════════════════════════════════════════════════
+let lP = true, lQ = true;
+
+function renderLogic() {
+  const body = document.getElementById("logic-body");
+  body.innerHTML = `
+  <div class="resumo-section">
+    <h3>🎮 Simulador ao vivo — escolha os valores de P e Q</h3>
+    <div class="logic-box">
+      <div class="l-title">VALORES DAS PROPOSIÇÕES</div>
+      <div class="logic-toggles">
+        <button class="logic-toggle ${lP?"true":"false"}" id="btn-p" onclick="toggleLogic('p')">P = ${lP?"V":"F"}</button>
+        <button class="logic-toggle ${lQ?"true":"false"}" id="btn-q" onclick="toggleLogic('q')">Q = ${lQ?"V":"F"}</button>
+      </div>
+      <div class="logic-result" id="logic-results"></div>
+    </div>
+  </div>
+
+  <div class="resumo-section">
+    <h3>📊 Tabela Verdade Completa</h3>
+    <table class="truth-table">
+      <tr><th>P</th><th>Q</th><th>¬P</th><th>P∧Q</th><th>P∨Q</th><th>P→Q</th><th>P↔Q</th></tr>
+      ${[
+        [true,true],[true,false],[false,true],[false,false]
+      ].map(([p,q])=>{
+        const np=!p,and=p&&q,or=p||q,imp=!p||q,bic=p===q;
+        const v=x=>`<span class="${x?"V":"F"}">${x?"V":"F"}</span>`;
+        return `<tr><td>${v(p)}</td><td>${v(q)}</td><td>${v(np)}</td><td>${v(and)}</td><td>${v(or)}</td><td>${v(imp)}</td><td>${v(bic)}</td></tr>`;
+      }).join("")}
+    </table>
+  </div>
+
+  <div class="resumo-section">
+    <h3>💡 Conectivos — resumo visual</h3>
+    <div class="logic-box">
+      <div class="l-title">QUANDO CADA UM É FALSO?</div>
+      <div class="logic-result">
+        <div class="logic-row"><span class="op">¬P (NÃO)</span><span style="font-size:12px;color:#b8c8e0">Inverte: V→F, F→V</span></div>
+        <div class="logic-row"><span class="op">P ∧ Q (E)</span><span style="font-size:12px;color:#b8c8e0">F quando qualquer um for F</span></div>
+        <div class="logic-row"><span class="op">P ∨ Q (OU)</span><span style="font-size:12px;color:#b8c8e0">F só quando AMBOS forem F</span></div>
+        <div class="logic-row"><span class="op">P → Q (SE…ENTÃO)</span><span style="font-size:12px;color:var(--red)">F só quando P=V e Q=F ⚠️</span></div>
+        <div class="logic-row"><span class="op">P ↔ Q (SSE)</span><span style="font-size:12px;color:#b8c8e0">F quando P e Q diferentes</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="resumo-section">
+    <h3>🔄 Equivalências importantes</h3>
+    <div class="highlight">p → q  ≡  ¬p ∨ q  ≡  ¬q → ¬p (contrapositiva)</div>
+    <div class="highlight">¬(p → q)  ≡  p ∧ ¬q  (negação do condicional)</div>
+    <div class="highlight">¬(p ∧ q)  ≡  ¬p ∨ ¬q  (De Morgan 1)</div>
+    <div class="highlight">¬(p ∨ q)  ≡  ¬p ∧ ¬q  (De Morgan 2)</div>
+  </div>
+
+  <div class="resumo-section">
+    <h3>✍️ Exemplos do tipo concurso</h3>
+    <div class="warn">⚠️ "Se o candidato estuda (P), então é aprovado (Q)"<br><br>
+    Quando é FALSA? Quando estuda E não é aprovado (P=V, Q=F).<br><br>
+    Contrapositiva (equivalente): "Se não foi aprovado, então não estudou"<br>
+    Recíproca (NÃO equivalente): "Se foi aprovado, então estudou"<br>
+    Negação: "Estuda E não é aprovado"</div>
+  </div>`;
+
+  updateLogicResults();
+}
+
+function toggleLogic(v) {
+  if (v==="p") lP=!lP; else lQ=!lQ;
+  document.getElementById("btn-p").className = `logic-toggle ${lP?"true":"false"}`;
+  document.getElementById("btn-p").textContent = `P = ${lP?"V":"F"}`;
+  document.getElementById("btn-q").className = `logic-toggle ${lQ?"true":"false"}`;
+  document.getElementById("btn-q").textContent = `Q = ${lQ?"V":"F"}`;
+  updateLogicResults();
+}
+
+function updateLogicResults() {
+  const el = document.getElementById("logic-results");
+  if (!el) return;
+  const p=lP, q=lQ;
+  const ops = [
+    ["¬P", !p], ["¬Q", !q],
+    ["P ∧ Q (E)", p&&q],
+    ["P ∨ Q (OU)", p||q],
+    ["P → Q (SE…ENTÃO)", !p||q],
+    ["P ↔ Q (SE E SOMENTE SE)", p===q]
+  ];
+  el.innerHTML = ops.map(([label,val]) =>
+    `<div class="logic-row">
+      <span class="op">${label}</span>
+      <span class="val ${val?"V":"F"}">${val?"VERDADEIRO":"FALSO"}</span>
+    </div>`
+  ).join("");
+}
+
+// ════════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════════
+renderHome();
+</script>
+</body>
+</html>
