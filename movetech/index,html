@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Diário Movetech — Agner Loss</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+        /* ── Overrides de página ── */
+        body { background: #f0f4fa; }
+
+        .movetech-hero {
+            background: #0A0F1C;
+            border-radius: 14px;
+            padding: 48px 32px 36px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #1E293B;
+        }
+        .movetech-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% -10%, #1e3a5f66 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .mt-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            background: #0EA5E9;
+            color: #fff;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            margin-bottom: 20px;
+        }
+        .mt-title {
+            font-size: clamp(44px, 9vw, 80px);
+            font-weight: 900;
+            color: #F1F5F9;
+            letter-spacing: -3px;
+            line-height: 1;
+            margin: 0 0 8px;
+            font-family: Georgia, serif;
+        }
+        .mt-title span { color: #0EA5E9; }
+        .mt-subtitle {
+            color: #64748B;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 0 0 32px;
+        }
+        .mt-stats {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        .mt-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 12px 20px;
+            border: 1px solid;
+            border-radius: 8px;
+            background: #0F172A;
+            min-width: 76px;
+        }
+        .mt-stat-icon { font-size: 18px; }
+        .mt-stat-count { font-weight: 700; font-size: 20px; }
+        .mt-stat-label { font-size: 10px; color: #475569; font-family: 'Courier New', monospace; }
+
+        /* ── Controles ── */
+        .mt-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0;
+        }
+        .mt-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+        .mt-filter-btn {
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: #6b7280;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            transition: all 0.2s;
+        }
+        .mt-filter-btn:hover { background: #e0e7ff; color: #2563eb; border-color: #2563eb; }
+        .mt-filter-btn.active { background: #1e3a5f; color: #e2e8f0; border-color: #334155; }
+
+        /* ── Timeline ── */
+        .mt-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .mt-entry {
+            display: grid;
+            grid-template-columns: 68px 20px 1fr;
+            align-items: flex-start;
+            gap: 0;
+        }
+        .mt-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 16px;
+            gap: 1px;
+        }
+        .mt-day  { font-size: 26px; font-weight: 900; color: #1f2933; line-height: 1; }
+        .mt-mon  { font-size: 10px; font-family: 'Courier New', monospace; color: #6b7280; letter-spacing: 2px; text-transform: uppercase; }
+        .mt-year { font-size: 9px; color: #9ca3af; font-family: 'Courier New', monospace; }
+        .mt-line {
+            width: 2px;
+            align-self: stretch;
+            margin-left: 9px;
+            margin-top: 22px;
+            border-radius: 2px;
+            min-height: 40px;
+            opacity: 0.45;
+        }
+        .mt-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-left: 3px solid;
+            border-radius: 0 10px 10px 0;
+            padding: 16px 20px;
+            margin-left: 8px;
+            box-shadow: 0 2px 8px rgba(15,23,42,0.06);
+        }
+        .mt-type-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .mt-entry-title {
+            margin: 0 0 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.3;
+        }
+        .mt-entry-body {
+            margin: 0 0 12px;
+            color: #4b5563;
+            line-height: 1.7;
+            font-size: 14px;
+            white-space: pre-line;
+        }
+        .mt-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+        .mt-tag {
+            padding: 2px 10px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            border-radius: 20px;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+        }
+        .mt-empty { color: #9ca3af; text-align: center; padding: 40px; font-style: italic; }
+
+        @media (max-width: 600px) {
+            .mt-entry { grid-template-columns: 52px 16px 1fr; }
+            .mt-day { font-size: 20px; }
+            .movetech-hero { padding: 32px 16px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar do blog -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a href="/" class="brand">
+                <span class="brand-logo">AL</span>
+                <div class="brand-text">
+                    <span class="brand-name">Agner Loss Rodrigues</span>
+                    <span class="brand-subtitle">Gestor de Tecnologia • Saúde Pública • Cloud &amp; DevOps</span>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="/">Sobre</a>
+                <a href="/projetos/">Projetos</a>
+                <a href="/concursos/">Concursos</a>
+                <a href="/movetech/" style="color:#2563eb; font-weight:600">Movetech</a>
+                <a href="/#contato">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page">
+
+        <!-- Hero escuro do diário -->
+        <div class="movetech-hero">
+            <div class="mt-badge">Magalu Cloud · 2026</div>
+            <h1 class="mt-title"><span>Move</span>tech</h1>
+            <p class="mt-subtitle">Diário de Projeto &amp; Estudos</p>
+            <div class="mt-stats" id="stats"></div>
+        </div>
+
+        <!-- Card de controles + timeline -->
+        <div class="card" style="padding: 1.5rem;">
+            <div class="mt-controls" style="margin-bottom:1.5rem">
+                <div class="mt-filters" id="filters"></div>
+            </div>
+            <div class="mt-timeline" id="timeline"></div>
+        </div>
+
+    </main>
+
+    <script>
+    // ─────────────────────────────────────────────
+    // ENTRADAS DO DIÁRIO — edite aqui no VSCode
+    // ─────────────────────────────────────────────
+    const entries = [
+      {
+        id: 9,
+        date: "2026-06-09",
+        type: "estudo",
+        title: "Dia 2 — Fundamentos de Sistemas e Infraestrutura",
+        content:
+          "Segundo dia de aulas do Movetech com professor Hamilton Rogério. Conteúdo: os 5 pilares técnicos que todo profissional de nuvem precisa dominar.\n\nH1 — Sistema de Arquivos e Comandos: Linux organiza tudo a partir de / (raiz). FHS define onde cada coisa fica: configs em /etc, logs em /var/log, binários em /usr/bin. Comandos: ls, cd, mkdir, cp, mv, rm, cat, nano, find, grep.\n\nH2 — Permissões no Linux: modelo RWX — r (leitura), w (escrita), x (execução). Notação octal: rwx=7, rw-=6, r--=4. chmod e chown na prática.\n\nH3 — Processos e Serviços: programas em execução são processos. Serviços são gerenciados pelo systemd. Comandos: systemctl start/stop/restart/status, journalctl, ps aux, top.\n\nH4 — Redes e Conectividade: modelo cliente-servidor, protocolos (HTTP:80, HTTPS:443, SSH:22, PostgreSQL:5432), DNS, acesso remoto com SSH.\n\nH5 — CLI e Automação com Bash: shell, scripts .sh, estruturas if/else, for, while.\n\nObservação: professor expôs UUID de tenant de conta real ao vivo — exemplo clássico de vacilo de segurança a evitar.",
+        tags: ["linux", "bash", "ssh", "dns", "systemctl", "permissões", "processos"],
+      },
+      {
+        id: 8,
+        date: "2026-06-08",
+        type: "estudo",
+        title: "Dia 1 — Fundamentos de Cloud e Modelos de Negócio",
+        content:
+          "Início oficial das aulas do Movetech. Conceitos base de computação em nuvem.\n\nCAPEX vs OPEX: CAPEX é investimento de capital — você compra a infraestrutura (servidor físico, data center). OPEX é gasto operacional — você aluga e paga mês a mês (cloud). A grande virada da cloud é transformar CAPEX em OPEX: a prefeitura não precisa comprar servidor pra rodar o e-SUS.\n\nCDN (Content Delivery Network): rede de servidores distribuídos globalmente que entrega conteúdo pelo servidor mais próximo do usuário. Sem CDN, latência alta. Com CDN, o usuário acessa um PoP local. Cloudflare (e-SUS) e CloudFront (blog) já estão em uso.\n\nModelos de serviço: IaaS (VMs), PaaS (DBaaS, Kubernetes gerenciado), SaaS (Google Workspace).",
+        tags: ["capex", "opex", "cdn", "iaas", "paas", "saas", "cloud", "fundamentos"],
+      },
+      {
+        id: 7,
+        date: "2026-06-05",
+        type: "projeto",
+        title: "e-SUS com HTTPS e domínio próprio — esus-homologacao.k8sloss.com.br",
+        content:
+          "Dia de muito aprendizado prático em segurança e DNS.\n\nArquitetura final implementada:\nUsuário → HTTPS (TLS 1.3) → Cloudflare (WAF + DDoS + certificado público) → HTTPS (Origin Certificate 15 anos) → Nginx (reverse proxy) → e-SUS :8080\n\nPassos executados:\n1. Criada conta no Cloudflare e domínio k8sloss.com.br migrado do Route 53\n2. Nameservers trocados no registro.br: raquel.ns.cloudflare.com + will.ns.cloudflare.com\n3. Registro DNS A criado: esus-homologacao → 201.23.81.40 (Proxied)\n4. Nginx instalado e configurado como reverse proxy na VM\n5. Ports 80 e 443 abertas no firewall da Magalu Cloud\n6. Cloudflare Origin Certificate gerado (15 anos, RSA 2048, wildcard *.k8sloss.com.br)\n7. Certificado instalado em /etc/nginx/certs/cloudflare.crt e .key\n8. SSL/TLS modo Full Strict (Rigoroso) ativado\n9. Blog agner.k8sloss.com.br restaurado com CNAME DNS-only para CloudFront\n\nResultado: https://esus-homologacao.k8sloss.com.br funcionando com cadeado verde.",
+        tags: ["https", "cloudflare", "nginx", "ssl", "dns", "certificado", "esus", "segurança"],
+      },
+      {
+        id: 6,
+        date: "2026-05-27",
+        type: "reflexao",
+        title: "Simulação Final: 2 VMs vs DBaaS vs On-Premise",
+        content:
+          "Simulação definitiva realizada na calculadora da Magalu Cloud com resultado surpreendente.\n\nArquitetura 2 VMs + Object Storage (escolhida):\n- VM1 Aplicação: BV4-8-100 → R$ 219,99/mês\n- VM2 Banco: BV4-8-150 → R$ 259,99/mês\n- Object Storage: 150 GiB → R$ 37,50/mês\n- TOTAL: R$ 517,48/mês\n\nArquitetura DBaaS (descartada por custo):\n- VM Aplicação: BV4-8-150 → R$ 259,99/mês\n- DBaaS DP4-16 Multi AZ 15K IOPS 250GB → R$ 2.781,15/mês\n- Object Storage: 150 GiB → R$ 37,50/mês\n- TOTAL: R$ 3.078,64/mês\n\nOn-Premise atual (Serra-ES):\n- Servidor: Windows Server 2016, Xeon Skylake 2.19GHz, 48GB RAM\n- App + banco no mesmo servidor, 35GB de banco, 40 UBSs atendidas\n- Custo estimado: R$ 2.000 a R$ 4.500/mês\n\nEconomia 2 VMs vs DBaaS: R$ 2.561,16/mês (83% mais barato)\nEconomia 2 VMs vs On-Premise (mínimo): R$ 1.482,52/mês",
+        tags: ["simulação", "custo", "2 vms", "dbaas", "on-premise", "comparativo", "esus"],
+      },
+      {
+        id: 5,
+        date: "2026-05-27",
+        type: "reflexao",
+        title: "Zonas de Disponibilidade Magalu Cloud — Aprendizado e Decisão de Arquitetura",
+        content:
+          "Estudo das Zonas de Disponibilidade (AZs) da Magalu Cloud a partir da documentação oficial.\n\nEstrutura atual:\n- Região SE1 (São Paulo) com 3 zonas independentes: br-se1-a, br-se1-b, br-se1-c\n- Cada zona é um datacenter físico separado com energia, rede e refrigeração independentes\n\nGrau de disponibilidade por produto:\n- VM (aplicação): zona única — se a AZ cair, a VM para. Solução: snapshots automáticos\n- Banco DBaaS Multi zona: replica automaticamente entre AZs\n- Block Storage NVMe: 99,999% de disponibilidade (5 noves)\n- Object Storage: replicado automaticamente entre AZs — nativo Multi AZ\n\nDecisão tomada: simular arquitetura com 2 VMs (aplicação + banco separados) para o ambiente de produção futuro.",
+        tags: ["availability zones", "alta disponibilidade", "arquitetura", "magalu cloud"],
+      },
+      {
+        id: 4,
+        date: "2026-05-27",
+        type: "reflexao",
+        title: "Arquitetura Evoluída: Object Storage para Anexo de Prontuários",
+        content:
+          "Descoberta importante durante o planejamento: o ESUS possui funcionalidade de Anexo de Arquivos (imagens, laudos, PDFs nos prontuários) que hoje está desabilitada no ambiente on-premise de Serra por falta de infraestrutura adequada.\n\nSolução identificada para a Magalu Cloud: Object Storage (compatível com S3).\n\nArquitetura final planejada:\n[ VM Aplicação ESUS ] → [ VM Banco PostgreSQL ]\n         ↓\n[ Object Storage ] ← arquivos dos prontuários\n\nVantagens do Object Storage sobre disco local:\n- Elástico: cresce conforme a demanda sem redimensionar disco\n- Custo por GB muito menor que Block Storage\n- Compatível com S3 — o ESUS aponta como diretório de destino\n- Ideal para arquivos médicos que crescem indefinidamente",
+        tags: ["object storage", "s3", "prontuário", "arquitetura", "esus"],
+      },
+      {
+        id: 3,
+        date: "2026-05-27",
+        type: "projeto",
+        title: "Projeto Planejado: ESUS Treinamento na Magalu Cloud",
+        content:
+          "Ideia definida para o projeto prático do Movetech: instalar o e-SUS APS PEC (versão Treinamento) na Magalu Cloud.\n\nA versão de treinamento é isolada — não envia dados ao Ministério da Saúde, dados resetam a cada 10 dias e não exige contra-chave do e-Gestor. Ideal para capacitar equipes da Secretaria de Saúde sem risco.\n\nStack planejada:\n- VM Linux (Ubuntu) na Magalu Cloud\n- Java 64-bit (pré-requisito do ESUS)\n- Docker + Docker Compose (containerizar a aplicação — Módulo 3)\n- IP público + domínio + HTTPS\n- Prometheus + Grafana para observabilidade (Módulo 4)\n\nEvolução por módulo do curso:\nMódulo 1 → Provisionar a VM\nMódulo 2 → Configurar rede, storage e IP\nMódulo 3 → Containerizar com Docker\nMódulo 4 → Monitorar com Prometheus/Grafana\nMódulo 5 → Documentar a arquitetura completa",
+        tags: ["esus", "magalu cloud", "docker", "java", "saúde pública", "planejamento"],
+      },
+      {
+        id: 2,
+        date: "2026-05-26",
+        type: "marco",
+        title: "Trilha de 100h — Estrutura do Programa",
+        content:
+          "Módulo 1 — Fundamentos de Sistemas e Infraestrutura (24h)\nMódulo 2 — Serviços Essenciais de Cloud Computing (24h)\nMódulo 3 — Desenvolvimento e Operação de Aplicações — DevOps (22h)\nMódulo 4 — Observabilidade e Resiliência de Sistemas (15h)\nMódulo 5 — Arquitetura de Soluções em Nuvem (15h)\n\nTotal: 100 horas. Formato: teoria + projetos práticos. Mínimo de 75% de presença.",
+        tags: ["trilha", "módulos", "cloud", "devops", "arquitetura"],
+      },
+      {
+        id: 1,
+        date: "2026-05-26",
+        type: "marco",
+        title: "Kickoff do Movetech — Cerimônia de Abertura",
+        content:
+          "Participei da cerimônia de abertura do Programa Move Tech Magalu com mais de 125 pessoas conectadas. Apresentação completa da trilha: 100 horas de conteúdo técnico divididas em 5 módulos. Assinei o Termo de Responsabilidade e confirmei presença. A primeira aula começa em 08/06 — segunda a quinta, das 19h às 22h. Plataforma: Google Classroom. Comunicação via e-mail e WhatsApp. Ao final do curso, quem se destacar entra no processo seletivo para vagas no Magalu!",
+        tags: ["kickoff", "magalu cloud", "movetech", "abertura"],
+      },
+    ];
+
+    // ─────────────────────────────────────────────
+    // CONFIG DE TIPOS — não precisa alterar
+    // ─────────────────────────────────────────────
+    const typeConfig = {
+      estudo:   { label: "Estudo",    color: "#0EA5E9", icon: "📚" },
+      projeto:  { label: "Projeto",   color: "#10B981", icon: "🛠️" },
+      marco:    { label: "Marco",     color: "#F59E0B", icon: "🏁" },
+      reflexao: { label: "Reflexão",  color: "#8B5CF6", icon: "💡" },
+    };
+
+    const months = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    const fmtDate = iso => {
+      const [y, m, d] = iso.split("-");
+      return { day: d, month: months[+m - 1], year: y };
+    };
+
+    let activeFilter = "todos";
+
+    function renderStats() {
+      const el = document.getElementById("stats");
+      el.innerHTML = Object.entries(typeConfig).map(([k, cfg]) => {
+        const count = entries.filter(e => e.type === k).length;
+        return `<div class="mt-stat" style="border-color:${cfg.color}">
+          <span class="mt-stat-icon">${cfg.icon}</span>
+          <span class="mt-stat-count" style="color:${cfg.color}">${count}</span>
+          <span class="mt-stat-label">${cfg.label}s</span>
+        </div>`;
+      }).join("");
+    }
+
+    function renderFilters() {
+      const el = document.getElementById("filters");
+      const all = ["todos", ...Object.keys(typeConfig)];
+      el.innerHTML = all.map(f => {
+        const label = f === "todos" ? "Todos" : `${typeConfig[f].icon} ${typeConfig[f].label}`;
+        const active = f === activeFilter ? "active" : "";
+        const style = (f !== "todos" && f === activeFilter)
+          ? `style="border-color:${typeConfig[f].color};color:${typeConfig[f].color}"` : "";
+        return `<button class="mt-filter-btn ${active}" ${style} onclick="setFilter('${f}')">${label}</button>`;
+      }).join("");
+    }
+
+    function renderTimeline() {
+      const el = document.getElementById("timeline");
+      const list = activeFilter === "todos" ? entries : entries.filter(e => e.type === activeFilter);
+      const sorted = [...list].sort((a, b) => a.date < b.date ? 1 : -1);
+
+      if (!sorted.length) {
+        el.innerHTML = `<p class="mt-empty">Nenhuma entrada ainda nessa categoria.</p>`;
+        return;
+      }
+
+      el.innerHTML = sorted.map(entry => {
+        const cfg = typeConfig[entry.type];
+        const { day, month, year } = fmtDate(entry.date);
+        const tags = entry.tags.map(t => `<span class="mt-tag">${t}</span>`).join("");
+        return `
+          <div class="mt-entry">
+            <div class="mt-date">
+              <span class="mt-day">${day}</span>
+              <span class="mt-mon">${month}</span>
+              <span class="mt-year">${year}</span>
+            </div>
+            <div class="mt-line" style="background:${cfg.color}"></div>
+            <div class="mt-card" style="border-left-color:${cfg.color}">
+              <span class="mt-type-badge" style="background:${cfg.color}22;color:${cfg.color}">${cfg.icon} ${cfg.label}</span>
+              <h2 class="mt-entry-title">${entry.title}</h2>
+              <p class="mt-entry-body">${entry.content}</p>
+              ${tags ? `<div class="mt-tags">${tags}</div>` : ""}
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    function setFilter(f) {
+      activeFilter = f;
+      renderFilters();
+      renderTimeline();
+    }
+
+    renderStats();
+    renderFilters();
+    renderTimeline();
+    </script>
+
+</body>
+</html>
