@@ -148,6 +148,14 @@ body {
     border: 1px solid #bfdbfe;
 }
 
+/* Tag especial MoveTech */
+.movetech-tag {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+    font-weight: 600;
+}
+
 /* Foto */
 .hero-photo {
     flex-shrink: 0;
@@ -214,17 +222,16 @@ body {
 
 /* Container que força o layout lado a lado */
 .gallery-container {
-    display: flex; /* Habilita o Flexbox */
-    gap: 20px; /* Espaço entre as duas colunas */
-    justify-content: center; /* Centraliza a galeria */
-    flex-wrap: wrap; /* Permite que os itens quebrem linha em telas pequenas */
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 /* Cada figura (item da galeria) */
 .gallery-item {
-    /* Define que cada figura deve ocupar aproximadamente metade do espaço */
-    flex: 1 1 45%; 
-    min-width: 300px; /* Garante que as imagens não fiquem microscopicamente pequenas */
+    flex: 1 1 45%;
+    min-width: 300px;
     text-align: center;
     border: 1px solid #ddd;
     padding: 15px;
@@ -233,20 +240,20 @@ body {
 
 /* Imagem */
 .gallery-item img {
-    max-width: 100%; /* Garante que a imagem se ajuste ao container */
+    max-width: 100%;
     height: auto;
     display: block;
     margin: 0 auto 10px auto;
 }
 
-/* Media Query: Garante que em telas menores que 768px (celulares), as imagens fiquem uma embaixo da outra */
+/* Media Query: telas pequenas */
 @media (max-width: 768px) {
     .gallery-container {
-        flex-direction: column; /* Altera para coluna em telas pequenas */
+        flex-direction: column;
         align-items: center;
     }
-    
+
     .gallery-item {
-        flex: 1 1 100%; /* Ocupa a largura total em telas pequenas */
+        flex: 1 1 100%;
     }
 }
