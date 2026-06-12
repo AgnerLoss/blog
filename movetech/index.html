@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../style.css" />
     <style>
-        /* ── Overrides de página ── */
         body { background: #f0f4fa; }
-
         .movetech-hero {
             background: #0A0F1C;
             border-radius: 14px;
@@ -76,8 +74,6 @@
         .mt-stat-icon { font-size: 18px; }
         .mt-stat-count { font-weight: 700; font-size: 20px; }
         .mt-stat-label { font-size: 10px; color: #475569; font-family: 'Courier New', monospace; }
-
-        /* ── Controles ── */
         .mt-controls {
             display: flex;
             flex-wrap: wrap;
@@ -100,13 +96,7 @@
         }
         .mt-filter-btn:hover { background: #e0e7ff; color: #2563eb; border-color: #2563eb; }
         .mt-filter-btn.active { background: #1e3a5f; color: #e2e8f0; border-color: #334155; }
-
-        /* ── Timeline ── */
-        .mt-timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        .mt-timeline { display: flex; flex-direction: column; gap: 20px; }
         .mt-entry {
             display: grid;
             grid-template-columns: 68px 20px 1fr;
@@ -152,20 +142,8 @@
             font-weight: 700;
             margin-bottom: 8px;
         }
-        .mt-entry-title {
-            margin: 0 0 8px;
-            font-size: 18px;
-            font-weight: 700;
-            color: #111827;
-            line-height: 1.3;
-        }
-        .mt-entry-body {
-            margin: 0 0 12px;
-            color: #4b5563;
-            line-height: 1.7;
-            font-size: 14px;
-            white-space: pre-line;
-        }
+        .mt-entry-title { margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #111827; line-height: 1.3; }
+        .mt-entry-body { margin: 0 0 12px; color: #4b5563; line-height: 1.7; font-size: 14px; white-space: pre-line; }
         .mt-tags { display: flex; gap: 6px; flex-wrap: wrap; }
         .mt-tag {
             padding: 2px 10px;
@@ -177,7 +155,6 @@
             font-family: 'Courier New', monospace;
         }
         .mt-empty { color: #9ca3af; text-align: center; padding: 40px; font-style: italic; }
-
         @media (max-width: 600px) {
             .mt-entry { grid-template-columns: 52px 16px 1fr; }
             .mt-day { font-size: 20px; }
@@ -187,7 +164,6 @@
 </head>
 <body>
 
-    <!-- Navbar do blog -->
     <header class="topbar">
         <div class="topbar-inner">
             <a href="/" class="brand">
@@ -208,30 +184,31 @@
     </header>
 
     <main class="page">
-
-        <!-- Hero escuro do diário -->
         <div class="movetech-hero">
             <div class="mt-badge">Magalu Cloud · 2026</div>
             <h1 class="mt-title"><span>Move</span>tech</h1>
             <p class="mt-subtitle">Diário de Projeto &amp; Estudos</p>
             <div class="mt-stats" id="stats"></div>
         </div>
-
-        <!-- Card de controles + timeline -->
         <div class="card" style="padding: 1.5rem;">
             <div class="mt-controls" style="margin-bottom:1.5rem">
                 <div class="mt-filters" id="filters"></div>
             </div>
             <div class="mt-timeline" id="timeline"></div>
         </div>
-
     </main>
 
     <script>
-    // ─────────────────────────────────────────────
-    // ENTRADAS DO DIÁRIO — edite aqui no VSCode
-    // ─────────────────────────────────────────────
     const entries = [
+      {
+        id: 10,
+        date: "2026-06-11",
+        type: "reflexao",
+        title: "Sessão de Arquitetura — e-SUS Produção, Migração e Dimensionamento",
+        content:
+          "Sessão completa de planejamento da arquitetura definitiva de produção do e-SUS APS PEC para a Secretaria Municipal de Saúde de Serra-ES.\n\n━━ PARTE 1 — ARQUITETURA DE PRODUÇÃO ━━\n\nContexto: ambiente de homologação já funcionando. Foco agora é produção — dados reais de cidadãos de 40 UBSs, cobertos pela LGPD.\n\nRequisitos do Ministério da Saúde para 100 usuários simultâneos:\n2 servidores separados (app + banco), 8GB RAM DDR4, Quad Core 2.2GHz\nDisco app: 100GB | Disco BD: 120GB | PostgreSQL mínimo 9.6\n\nArquitetura final decidida:\nVM Aplicação   → 1x Linux, 4 core, 8GB, 100GB  → R$   219,99/mês\n                + Snapshot automático diário\nDBaaS          → Multi zona, DP4-16, 15K IOPS  → R$ 2.416,65/mês\n                + 100GiB, PostgreSQL, backup e failover automáticos\nObject Storage → 150GiB (anexos de prontuário) → R$    37,50/mês\n                + Multi AZ nativo\nVPC            → sem custo direto\nTotal mensal   →                                  R$ 2.674,14/mês\nTotal anual    →                                  R$ 32.089,68/ano\nTotal 3 anos   →                                  R$ 96.269,04\n\nDecisões e justificativas:\n\n1. DBaaS em vez de VM de banco\nBanco é o ativo mais crítico. DBaaS Multi AZ entrega replicação automática entre zonas, failover sem intervenção manual, backup gerenciado e patches automáticos. VM de banco manual exigiria gerenciar tudo isso — inviável em produção com LGPD.\n\n2. VM de aplicação sem Multi AZ\nCamada de aplicação é stateless. Se cair, sobe nova VM em minutos. Snapshot diário automático é suficiente.\n\n3. Object Storage para anexos\nFuncionalidade de Anexo de Arquivos estava desabilitada no on-premise de Serra por falta de infraestrutura. Na nuvem entregamos isso desde o primeiro dia.\n\n4. VPC sem custo extra\nSem cobrança direta — paga só tráfego de saída. Para usuários internos via Cloudflare, custo irrelevante.\n\n5. Escalabilidade confirmada\nVM: redimensiona online. DBaaS: escala vertical sem downtime. Object Storage: cresce sozinho.\n\n6. Desligamento programado descartado\nAvaliamos desligar a VM fora do horário via GitHub Actions Secrets. Descartado por segurança — ambiente com dados de saúde não comporta esse risco. Mês cheio.\n\n7. Magalu Cloud não tem Reserved Instances\nModelo pay-as-you-go. Consumo acima de R$3.000/mês dá acesso a TAM exclusivo — abre espaço para negociação comercial direta.\n\n━━ PARTE 2 — VIABILIDADE JURÍDICA ━━\n\nCusto anual de R$32.089,68 cabe no limite de dispensa de licitação por valor (Lei 14.133/2021, serviços até R$57.184,00). Porém Magalu Cloud não é fornecedor exclusivo — AWS, Azure e Google Cloud concorrem no mesmo mercado, inviabilizando inexigibilidade.\n\nDispensa por valor: cabe no limite, mas exige renovação anual — menos seguro para contrato continuado.\nPregão Eletrônico: processo mais longo, mas permite contrato plurianual (até 5 anos) e é mais robusto juridicamente.\n\nOrientação: Pregão com especificação técnica detalhada baseada nos requisitos do MS (Multi AZ, DBaaS PostgreSQL, Object Storage S3, 100 usuários simultâneos) direciona naturalmente para quem atende. Consultar jurídico da prefeitura.\n\n━━ PARTE 3 — PLANO DE MIGRAÇÃO ━━\n\nContexto do banco atual:\nTamanho: ~36GB | Windows Server 2016, PostgreSQL embarcado porta 5433\n40 UBSs atendidas | Projeção: ~20% ao ano → ~62GB em 3 anos\nDecisão: DBaaS 100GiB → margem saudável sem redimensionar ✅\n\nRiscos e mitigações:\n1. Versão PostgreSQL (9.6/13 → 16): dump/restore em homologação antes da virada\n2. Perda de dados: backup full do banco Windows antes de qualquer movimento\n3. Comportamento no Linux: e-SUS é multiplataforma, homologação já valida\n4. Equipe sem familiaridade Linux: ambiente de homologação já funcionando\n\nPlano passo a passo:\nPasso 1 — Verificar versão atual\n\"C:\\Program Files\\e-SUS\\PostgreSQL\\bin\\psql.exe\" -U postgres -p 5433 -c \"SELECT version();\"\n\nPasso 2 — Dump do banco Windows\npg_dump.exe -U postgres -p 5433 -d esus -F c -f C:\\backup\\esus_producao.dump\n\nPasso 3 — Restore no DBaaS de homologação\npg_restore -h <host-dbaas-homolog> -U postgres -d esus -F c esus_producao.dump\n\nPasso 4 — Validação de integridade\nSELECT COUNT(*) FROM tb_cidadao;\nSELECT COUNT(*) FROM tb_prontuario;\nSELECT COUNT(*) FROM tb_atendimento_individual;\nComparar com contagem do banco Windows. Profissional de saúde abre prontuários reais e valida visualmente.\n\nPasso 5 — Validar log na subida\ntail -f /opt/e-SUS/webserver/logs/pec.log\nErro Liquibase = incompatibilidade de versão PostgreSQL.\n\nPasso 6 — Operação paralela (2 a 4 semanas)\nWindows on-premise e Linux nuvem simultaneamente. Só desliga o Windows após aprovação dos profissionais de saúde.\n\n━━ PARTE 4 — DIMENSIONAMENTO OBJECT STORAGE ━━\n\nDados reais (Relatório de Atendimento Individual jun/2025 a mai/2026):\nTotal de atendimentos: 1.096.777\n47 unidades de saúde (ESFs, UBSs, URSs, CAPS, AMES)\nMaior mês: 104.996 (mar/2026) | Menor mês: 77.828 (dez/2025)\nMédia mensal: ~91.398 atendimentos\n\nPremissas:\n10% dos atendimentos geram upload (resultados, laudos, PDFs)\nTamanho médio: 1MB por arquivo\nRetenção legal: 20 anos (Lei 13.787/2018)\n\nProjeção de volume:\nArquivos/ano: 109.677 | Volume/ano: ~107GB\nAno 1: ~107GB | Ano 5: ~535GB | Ano 10: ~1TB | Ano 20: ~2TB\n\nImpacto no custo mensal:\nAno 1  → 150GiB  → R$  37,50/mês\nAno 2  → 250GiB  → R$  62,50/mês\nAno 5  → 600GiB  → R$ 150,00/mês\nAno 10 → 1TiB    → R$ 256,00/mês\n\nArquitetura revisada com projeção:\nTotal ano 1:  R$ 2.674,14/mês\nTotal ano 5:  R$ 2.786,64/mês\nTotal ano 10: R$ 2.892,64/mês\n\nCrescimento de +R$218/mês em 10 anos — irrelevante frente ao benefício. A funcionalidade de anexo de arquivos não existe hoje no on-premise de Serra. Na nuvem está disponível desde o primeiro dia, com crescimento elástico e automático.\n\nEssa não é só uma migração técnica — é a entrega de uma funcionalidade clínica que os profissionais de saúde de Serra nunca tiveram.",
+        tags: ["arquitetura", "produção", "dbaas", "multi-az", "esus", "lgpd", "magalu cloud", "object storage", "vpc", "migração", "postgresql", "dump", "restore", "homologação", "licitação", "lei 14133", "pregão", "dimensionamento", "atendimentos", "série histórica", "projeção", "saúde pública"],
+      },
       {
         id: 9,
         date: "2026-06-09",
@@ -315,9 +292,6 @@
       },
     ];
 
-    // ─────────────────────────────────────────────
-    // CONFIG DE TIPOS — não precisa alterar
-    // ─────────────────────────────────────────────
     const typeConfig = {
       estudo:   { label: "Estudo",    color: "#0EA5E9", icon: "📚" },
       projeto:  { label: "Projeto",   color: "#10B981", icon: "🛠️" },
@@ -361,12 +335,10 @@
       const el = document.getElementById("timeline");
       const list = activeFilter === "todos" ? entries : entries.filter(e => e.type === activeFilter);
       const sorted = [...list].sort((a, b) => a.date < b.date ? 1 : -1);
-
       if (!sorted.length) {
         el.innerHTML = `<p class="mt-empty">Nenhuma entrada ainda nessa categoria.</p>`;
         return;
       }
-
       el.innerHTML = sorted.map(entry => {
         const cfg = typeConfig[entry.type];
         const { day, month, year } = fmtDate(entry.date);
