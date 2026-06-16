@@ -201,6 +201,15 @@
     <script>
     const entries = [
       {
+        id: 12,
+        date: "2026-06-12",
+        type: "reflexao",
+        title: "Comparativo de Custos — Magalu Cloud vs AWS São Paulo",
+        content:
+          "Análise comparativa de custos entre Magalu Cloud e AWS São Paulo (sa-east-1) para a arquitetura de produção do e-SUS APS PEC de Serra-ES.\n\nPOR QUE SÃO PAULO E NÃO N. VIRGÍNIA?\nDados de saúde de cidadãos brasileiros precisam ficar no Brasil por exigência da LGPD. N. Virgínia está fora de cogitação. A comparação correta é AWS São Paulo (sa-east-1).\n\nSIMULAÇÃO COMPARATIVA (dólar a R$5,80)\n\nVM Aplicação:\nMagalu Cloud BV4-8 (4vCPU, 8GB) → R$ 219,99/mês\nAWS EC2 t3.xlarge (4vCPU, 16GB) → ~$150/mês = R$ 870,00/mês\n\nDBaaS Multi AZ:\nMagalu Cloud DP4-16, 15K IOPS, 100GiB → R$ 2.416,65/mês\nAWS RDS db.r6g.large Multi-AZ        → ~$600/mês = R$ 3.480,00/mês\n\nObject Storage:\nMagalu Cloud 150GiB → R$ 37,50/mês\nAWS S3 Standard 150GiB → ~$5/mês = R$ 29,00/mês\n\nTOTAL MAGALU CLOUD: R$ 2.674,14/mês\nTOTAL AWS SÃO PAULO: R$ 4.379,00/mês\nDIFERENÇA: +R$ 1.704,86/mês na AWS (+64% mais caro)\n\nFATORES ALÉM DO CUSTO\nAWS São Paulo:\n- Cobra em USD → risco cambial para orçamento público em BRL\n- Suporte em inglês\n- Reserved Instances com até 63% de desconto (compromisso 1-3 anos)\n- Portfólio de serviços mais amplo\n- Marca reconhecida globalmente\n- LGPD: dados no Brasil ✅\n\nMagalu Cloud:\n- Cobra em BRL → sem risco cambial ✅\n- Suporte em português ✅\n- TAM dedicado a partir de R$3.000/mês ✅\n- Sem desconto formal por contrato\n- Portfólio menor mas suficiente para o e-SUS\n- Empresa brasileira, produto nacional\n- LGPD: dados no Brasil ✅\n\nCONCLUSÃO\nMagalu Cloud é 64% mais barata que AWS São Paulo para essa arquitetura. Para uma prefeitura com orçamento público em reais, a variação cambial da AWS é um risco real de gestão — uma alta do dólar pode encarecer o contrato de forma imprevisível. A Magalu Cloud entrega o que o projeto precisa (Multi AZ, DBaaS PostgreSQL, Object Storage S3) em reais, com suporte em português e a um custo muito inferior.",
+        tags: ["comparativo", "aws", "magalu cloud", "custo", "são paulo", "lgpd", "dbaas", "câmbio", "orçamento público", "esus"],
+      },
+      {
         id: 11,
         date: "2026-06-12",
         type: "projeto",
