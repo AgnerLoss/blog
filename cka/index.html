@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resumos CKA — Agner Loss Rodrigues</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    /* ── Estilos específicos da página CKA ── */
+    .cka-hero {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      margin-bottom: 2rem;
+    }
+    .cka-hero h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.4rem;
+    }
+    .cka-hero p {
+      opacity: 0.8;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    .cka-badge {
+      display: inline-block;
+      background: #38bdf8;
+      color: #0f2027;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── Cards de capítulo ── */
+    .cap-card {
+      border-left: 4px solid #38bdf8;
+      padding: 1.5rem 1.8rem;
+      background: #f8fafc;
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 1.5rem;
+    }
+    .cap-card h2 {
+      font-size: 1.1rem;
+      color: #0f2027;
+      margin-bottom: 0.3rem;
+    }
+    .cap-card .cap-meta {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Resumo curto ── */
+    .resumo-curto {
+      font-size: 0.93rem;
+      line-height: 1.7;
+      color: #334155;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── Tabela de conceitos ── */
+    .conceitos-titulo {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 0.6rem;
+    }
+    .conceitos-tabela {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .conceitos-tabela th {
+      background: #0f2027;
+      color: #38bdf8;
+      text-align: left;
+      padding: 0.5rem 0.8rem;
+      font-weight: 600;
+    }
+    .conceitos-tabela td {
+      padding: 0.45rem 0.8rem;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+      vertical-align: top;
+    }
+    .conceitos-tabela tr:last-child td {
+      border-bottom: none;
+    }
+    .conceitos-tabela tr:nth-child(even) td {
+      background: #f1f5f9;
+    }
+
+    /* ── Tags de fixação ── */
+    .fixacao {
+      margin-top: 1.2rem;
+      padding: 0.8rem 1rem;
+      background: #fef9c3;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #78350f;
+    }
+    .fixacao strong {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── Índice lateral de capítulos ── */
+    .indice {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .indice a {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .indice a:hover {
+      background: #38bdf8;
+      color: #fff;
+    }
+
+    /* ── Responsividade ── */
+    @media (max-width: 600px) {
+      .cka-hero { padding: 1.2rem 1.2rem; }
+      .cap-card { padding: 1rem 1rem; }
+      .conceitos-tabela { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra fixa de navegação (igual ao index.html) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="/" class="brand">
+        <span class="brand-logo">AL</span>
+        <div class="brand-text">
+          <span class="brand-name">Agner Loss Rodrigues</span>
+          <span class="brand-subtitle">
+            Gestor de Tecnologia • Saúde Pública • Cloud &amp; DevOps
+          </span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="/#sobre">Sobre</a>
+        <a href="/projetos/index.html">Projetos</a>
+        <a href="/concursos/index.html">Concursos</a>
+        <a href="/#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- Hero -->
+    <div class="cka-hero">
+      <span class="cka-badge">Revisão CKA</span>
+      <h1>📚 Resumos — Kubernetes Fundamentals (LFS258)</h1>
+      <p>Notas de estudo para a certificação Certified Kubernetes Administrator (CKA) — Linux Foundation</p>
+    </div>
+
+    <!-- Índice rápido -->
+    <div class="card">
+      <p style="font-size:0.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.8rem;">Capítulos</p>
+      <div class="indice">
+        <a href="#cap1">Cap 1 — Introdução</a>
+        <a href="#cap2">Cap 2 — Fundamentos</a>
+        <!-- Novos capítulos serão adicionados aqui -->
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         CAPÍTULO 1 — Introdução ao Curso
+    ══════════════════════════════════════════ -->
+    <div id="cap1" class="cap-card card">
+      <h2>Capítulo 1 — Introdução ao Curso</h2>
+      <p class="cap-meta">LFS258 · Linux Foundation · 2026</p>
+
+      <p class="resumo-curto">
+        O curso <strong>Kubernetes Fundamentals (LFS258)</strong> prepara para a certificação CKA e cobre desde a instalação e configuração de clusters até segurança, alta disponibilidade e troubleshooting. Não exige experiência prévia com Kubernetes — apenas conhecimento básico de Linux. O CKA é um exame hands-on de 2 horas com 15–20 tarefas em ambiente real de linha de comando, com nota mínima de 66% para aprovação e direito a uma segunda tentativa gratuita.
+      </p>
+
+      <p class="conceitos-titulo">🔑 Conceitos-chave</p>
+      <table class="conceitos-tabela">
+        <thead>
+          <tr><th>Conceito</th><th>O que é</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Linux Foundation</strong></td>
+            <td>Organização sem fins lucrativos que hospeda projetos open source críticos (Linux, Kubernetes, Node.js). Oferece cursos e certificações reconhecidas globalmente.</td>
+          </tr>
+          <tr>
+            <td><strong>CKA</strong></td>
+            <td>Certified Kubernetes Administrator. Prova hands-on, 2h, ambiente real, nota mínima 66%. Custa US$ 395 (inclui 1 retake gratuito em 12 meses).</td>
+          </tr>
+          <tr>
+            <td><strong>CNCF</strong></td>
+            <td>Cloud Native Computing Foundation — responsável por manter e certificar o Kubernetes.</td>
+          </tr>
+          <tr>
+            <td><strong>LFS258</strong></td>
+            <td>Código do curso Kubernetes Fundamentals da Linux Foundation. Material atualizado em junho/2026.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="fixacao">
+        <strong>💡 Para fixar</strong>
+        O CKA é inteiramente prático — não tem questões de múltipla escolha. Você opera um cluster real dentro de um terminal. Quanto mais labs práticos você fizer, maior a chance de passar na primeira tentativa.
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         CAPÍTULO 2 — Fundamentos do Kubernetes
+    ══════════════════════════════════════════ -->
+    <div id="cap2" class="cap-card card">
+      <h2>Capítulo 2 — Fundamentos do Kubernetes</h2>
+      <p class="cap-meta">LFS258 · Basics of Kubernetes</p>
+
+      <p class="resumo-curto">
+        Kubernetes (κυβερνήτης = timoneiro em grego, abreviado <strong>K8s</strong>) é um orquestrador de contêineres open source criado pelo Google em 2014, baseado em 15 anos de experiência com os sistemas internos <strong>Borg</strong> e <strong>Omega</strong>. Ele automatiza o deploy, escalonamento e gerenciamento do ciclo de vida de contêineres em infraestruturas distribuídas. Segundo a pesquisa CNCF 2025, <strong>82% das organizações que usam contêineres rodam Kubernetes em produção</strong>.
+      </p>
+
+      <p class="conceitos-titulo">🔑 Conceitos-chave</p>
+      <table class="conceitos-tabela">
+        <thead>
+          <tr><th>Objeto/Conceito</th><th>Função</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Pod</strong></td>
+            <td>Menor unidade do K8s. Agrupa 1+ contêineres que compartilham IP, storage e namespace. Um contêiner roda a app principal; os demais são suporte (sidecars).</td>
+          </tr>
+          <tr>
+            <td><strong>Deployment</strong></td>
+            <td>Operador padrão para gerenciar pods. Não controla pods diretamente — gerencia ReplicaSets.</td>
+          </tr>
+          <tr>
+            <td><strong>ReplicaSet</strong></td>
+            <td>Garante que o número desejado de pods esteja sempre rodando. Cria ou encerra pods conforme necessário.</td>
+          </tr>
+          <tr>
+            <td><strong>Service</strong></td>
+            <td>Atribui IP estável e roteia tráfego entre pods usando labels. Permite comunicação entre pods, namespaces e recursos externos.</td>
+          </tr>
+          <tr>
+            <td><strong>Namespace</strong></td>
+            <td>Isola recursos dentro do cluster. Permite multi-tenancy. Pods em namespaces diferentes se comunicam via Services.</td>
+          </tr>
+          <tr>
+            <td><strong>kubelet</strong></td>
+            <td>Agente que roda em cada nó. Garante que os contêineres estejam alinhados com o estado declarado.</td>
+          </tr>
+          <tr>
+            <td><strong>kube-proxy</strong></td>
+            <td>Gerencia regras de rede em cada nó. Junto com kubelet, roda em todos os nós (control plane e workers).</td>
+          </tr>
+          <tr>
+            <td><strong>kube-apiserver</strong></td>
+            <td>Ponto central de comunicação do cluster. Todos os componentes e operadores consultam a API.</td>
+          </tr>
+          <tr>
+            <td><strong>kube-controller-manager</strong></td>
+            <td>Contém controllers internos (Deployment, ReplicaSet etc.). Funcionalidades extras via CRDs.</td>
+          </tr>
+          <tr>
+            <td><strong>etcd</strong></td>
+            <td>Banco de dados chave-valor que armazena o estado do cluster em JSON. Configurações são escritas em YAML e convertidas automaticamente.</td>
+          </tr>
+          <tr>
+            <td><strong>Labels</strong></td>
+            <td>Pares chave-valor nos metadados dos objetos. Permitem consultas e seleção eficiente sem precisar conhecer nomes/UIDs.</td>
+          </tr>
+          <tr>
+            <td><strong>Taints / Tolerations</strong></td>
+            <td>Taints nos nós evitam que pods sejam agendados neles. Tolerations nos pods permitem contornar esse bloqueio.</td>
+          </tr>
+          <tr>
+            <td><strong>CRD</strong></td>
+            <td>Custom Resource Definition — estende a API do K8s com novos tipos de objetos personalizados.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="conceitos-titulo" style="margin-top:1.2rem;">🏗️ Arquitetura resumida</p>
+      <table class="conceitos-tabela">
+        <thead>
+          <tr><th>Camada</th><th>Componentes principais</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Control Plane</strong></td>
+            <td>kube-apiserver, kube-controller-manager, kube-scheduler, etcd. Deve rodar em Linux. Mínimo 3 nós para HA.</td>
+          </tr>
+          <tr>
+            <td><strong>Worker Nodes</strong></td>
+            <td>kubelet, kube-proxy, container runtime. Suporta Linux e Windows Server 2019/2022.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="conceitos-titulo" style="margin-top:1.2rem;">⚙️ Microserviços vs Monolito</p>
+      <table class="conceitos-tabela">
+        <thead>
+          <tr><th></th><th>Legado (Monolito)</th><th>Kubernetes (Microserviços)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Escalonamento</strong></td>
+            <td>Escala o servidor inteiro (hardware maior)</td>
+            <td>Escala só o serviço que precisa (horizontal)</td>
+          </tr>
+          <tr>
+            <td><strong>Falha</strong></td>
+            <td>Derruba toda a aplicação</td>
+            <td>Componente é substituído automaticamente</td>
+          </tr>
+          <tr>
+            <td><strong>Deploy</strong></td>
+            <td>Parada de serviço (downtime)</td>
+            <td>Rolling update — zero downtime</td>
+          </tr>
+          <tr>
+            <td><strong>Comunicação</strong></td>
+            <td>Chamadas internas acopladas</td>
+            <td>Via Service objects e labels (desacoplado)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="fixacao">
+        <strong>💡 Para fixar</strong>
+        Kubernetes é desacoplado e transitório: ele <em>espera</em> que componentes falhem e se recupera automaticamente. O teste mental do "Chaos Monkey" — e se um pod morrer aleatoriamente agora? — é a essência do design cloud native.
+      </div>
+    </div>
+
+    <!-- Rodapé da página -->
+    <div class="card" style="text-align:center;font-size:0.82rem;color:#94a3b8;">
+      Atualizado conforme o curso avança · Certificação CKA · <a href="/">← Voltar ao início</a>
+    </div>
+
+  </main>
+</body>
+</html>
