@@ -210,6 +210,15 @@
     //    tags: ["sonho", "carreira", "magalu cloud", "esus", "municípios", "saúde pública", "solutions architect", "mercado", "família", "motivação"],
     //  },
       {
+        id: 13,
+        date: "2026-06-23",
+        type: "projeto",
+        title: "Módulo 3 — Docker, Container Registry e Kubernetes",
+        content:
+          "Sessão prática do Módulo 3 do Movetech — Do container local ao Kubernetes na Magalu Cloud.\n\nPARTE 1 — CONTAINERIZAÇÃO\nScript ecommerce.sh (MVP bash do exercício anterior) containerizado com Docker.\nPrimeira tentativa com Alpine Linux falhou — grep -P não suportado no BusyBox.\nSolução: migrou pra FROM ubuntu:24.04.\nBuild bem-sucedido: imagem ecommerce-agner:latest (117MB).\n\nPARTE 2 — APP WEB\nEvoluiu o projeto para uma API Flask (Python) com frontend HTML dark theme.\nArquivos: app.py (Flask) + index.html (formulário + listagem de pedidos).\nFuncionalidades: adicionar pedido, detectar duplicata e somar quantidade, validação de input.\nContainer rodando na porta 8080 — testado e validado no browser.\nURL: http://[IP da VM]:8080\n\nPARTE 3 — CONTAINER REGISTRY\nLogin no registry privado da Magalu Cloud:\nEndpoint: container-registry.br-se1.magalu.cloud\nRepositório criado: ecommerce-agner\nImagem tagueada e push realizado com sucesso:\ndocker tag ecommerce-web container-registry.br-se1.magalu.cloud/ecommerce-agner/ecommerce-web:latest\ndocker push container-registry.br-se1.magalu.cloud/ecommerce-agner/ecommerce-web:latest\nDigest confirmado: sha256:08ecd150b40616922901190b72ddb253af0e8089cdfd654c2100a8944689d91e\n\nPARTE 4 — KUBERNETES (em andamento)\nCluster ecommerce-agner criado na Magalu Cloud:\nVersão: v1.35.2 | Plataforma: v3.0.0 | Região: br-se1\n5 nodes | 1 node pool\nKubeconfig baixado: ecommerce-agner-kubeconfig.yaml\n\nPróximos passos:\n1. Instalar kubectl na VM\n2. Configurar kubeconfig\n3. Criar secret do registry no cluster\n4. Aplicar Deployment (3 réplicas) + Service LoadBalancer\n5. Acessar aplicação pelo IP externo\n\nCONCEITOS APRENDIDOS\nNode: VM do cluster — onde os pods rodam\nPod: menor unidade K8s — 1+ containers com rede compartilhada\nDeployment: controla réplicas, auto-recupera pods que caem\nService LoadBalancer: expõe os pods externamente com IP público\nQuorum: mínimo 3 nodes (ímpar) em produção para evitar split-brain\nContainer Registry: repositório privado de imagens Docker",
+        tags: ["docker", "container", "flask", "python", "kubernetes", "k8s", "container registry", "magalu cloud", "deployment", "loadbalancer", "nodes", "pods", "movetech", "módulo 3"],
+      },
+      {
         id: 12,
         date: "2026-06-15",
         type: "reflexao",
