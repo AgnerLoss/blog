@@ -211,6 +211,15 @@
     //  },
       // ENTRADA NOVA — colar ANTES da entrada id:13 existente no array entries
       {
+        id: 15,
+        date: "2026-06-25",
+        type: "estudo",
+        title: "Módulo 3 — Laboratório: Block Storage, Snapshot e Restauração",
+        content:
+          "Laboratório prático de Block Storage na Magalu Cloud — ciclo completo de criação, uso, snapshot e restauração.\n\nCONTEXTO\nAula ao vivo com o professor Gilmar. Região Sudeste instável — laboratório executado na região Nordeste (br-ne1).\nVM Debian 13.5 criada do zero para seguir o roteiro original.\n\nPASSO 1 — VOLUME ANEXADO\nVolume de 10GiB (NVME1K) criado e anexado à VM.\nlsblk confirmou /dev/vdb disponível sem partição.\n\nPASSO 2 — FORMATAÇÃO E MONTAGEM\nsudo mkfs.ext4 -F /dev/vdb\nsudo mkdir -p /dados\nsudo mount /dev/vdb /dados\nVolume montado com 9.8GB disponíveis.\n\nPASSO 3 — ARQUIVO DE TESTE\necho \"teste\" | sudo tee /dados/a.txt\nArquivo gravado e lido com sucesso.\n\nPASSO 4 — MONTAGEM AUTOMÁTICA NO BOOT\nUUID obtido via blkid e adicionado no /etc/fstab com opção nofail.\nTestado com umount + mount -a — arquivo persistiu.\n\nPASSO 5 — SNAPSHOT\nVolume desmontado (sync + umount) antes do snapshot para garantir consistência.\nSnapshot criado pelo painel: 20260625-214721-snapshot-volume-lab (10GiB, Disponível).\n\nPASSO 6 — QUEBRAR DE PROPÓSITO\nArquivo deletado: sudo rm /dados/a.txt\nDiretório /dados ficou apenas com lost+found.\n\nPASSO 7 — RESTAURAÇÃO\nMagalu Cloud usa Opção B: cria novo volume a partir do snapshot.\nNovo volume anexado à VM — apareceu como /dev/vdc.\nsudo mount /dev/vdc /dados\ncat /dados/a.txt → retornou \"teste\" ✅\n\nLIMPEZA\nVolumes desanexados e destruídos.\nSnapshot destruído.\nVM destruída.\n\nCONCEITOS CONSOLIDADOS\nBlock Storage: disco extra anexável à VM, independente do disco do sistema\nSnapshot: foto do volume em um momento — base para restauração ou novo volume\nnofail no fstab: sistema sobe mesmo se o volume não estiver disponível\nOpção A vs B: algumas clouds restauram no mesmo volume, outras criam um novo\nSnapshot também cobra — destruir junto com o volume ao encerrar o lab",
+        tags: ["block storage", "snapshot", "restauração", "debian", "fstab", "ext4", "mount", "lsblk", "magalu cloud", "laboratório", "módulo 3"],
+      },
+      {
         id: 14,
         date: "2026-06-24",
         type: "projeto",
