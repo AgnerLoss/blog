@@ -211,6 +211,15 @@
     //  },
       // ENTRADA NOVA — colar ANTES da entrada id:13 existente no array entries
       {
+        id: 16,
+        date: "2026-06-29",
+        type: "estudo",
+        title: "Módulo 3 — Object Storage: rclone, FUSE e Bash-Commerce",
+        content:
+          "Última aula do Módulo 3 — feriado em Serra-ES, jogo do Brasil, mas a aula rolou. Duas abordagens práticas de Object Storage na Magalu Cloud executadas da máquina local.\n\nBÔNUS DO DIA\ne-SUS APS PEC atualizado para a versão 5.5.19 durante a aula — download do instalador direto na VM, parada do serviço, execução do .jar em modo console. Migração do banco concluída 100% e servidor de aplicação subiu automaticamente.\n\nABORDAGEM 1 — RCLONE + FUSE\nInstalação do rclone na máquina local (Ubuntu).\nConfiguração do remote maga_bucket via arquivo ~/.config/rclone/rclone.conf:\ntype = s3, provider = Magalu, endpoint = https://br-se1.magaluobjects.com\nBucket criado: teste-aula-magalu\nAPI Key criada no console da Magalu Cloud e configurada no rclone.\nrclone lsd maga_bucket: → listou os dois buckets (esus-anexos-serra e teste-aula-magalu) ✅\nMontagem do bucket via FUSE:\nrclone mount maga_bucket:teste-aula-magalu ~/bucket-vm --vfs-cache-mode writes\nArquivo gravado localmente: echo \"teste\" | tee ~/bucket-vm/a.txt\nValidado no console da Magalu Cloud: a.txt apareceu no bucket (6B, STANDARD) ✅\nDesmontagem: fusermount3 -u ~/bucket-vm\n\nABORDAGEM 2 — BASH-COMMERCE + OBJECT STORAGE\nScript bash-commerce-object-storage-final.sh — fluxo completo:\nGera pedidos simulados em pedidos.csv\nCria snapshots versionados em snapshots/ a cada ciclo\nA cada 3 hits envia snapshot pro bucket via mgc object-storage objects upload\nAtualiza index.html com status, último objeto enviado e comando de presign\nServido via python3 -m http.server 8080\n\nPROBLEMA E SOLUÇÃO\nPrimeira execução: status \"Falha no upload\" — mgc não estava autenticado com API Key do Object Storage.\nSolução:\nmgc auth login\nmgc object-storage api-key create chave-aula\nmgc object-storage api-key set <UUID>\nApós autenticação: status mudou para \"Upload concluído com sucesso\" ✅\n31 snapshots enviados ao bucket com timestamps versionados.\n\nLIMPEZA\nrclone delete maga_bucket:teste-aula-magalu/pedidos\nBucket limpo e validado.\n\nCONCEITOS CONSOLIDADOS\nrclone: ferramenta universal para sincronizar arquivos com qualquer backend cloud\nFUSE: monta bucket S3 como pasta local — transparente para o sistema\nno_check_bucket: evita erros de validação em backends S3 compatíveis\nAPI Key Object Storage: credencial separada da autenticação geral da conta\nPresign: URL temporária para acesso a objeto privado sem expor credenciais\nObject Storage não tem disco — cresce infinitamente, cobra por uso\nDiferença Block vs Object: Block = disco anexado à VM; Object = arquivos acessados por URL",
+        tags: ["object storage", "rclone", "fuse", "s3", "mgc", "bash", "presign", "api key", "bucket", "magalu cloud", "esus", "5.5.19", "módulo 3"],
+      },
+      {
         id: 15,
         date: "2026-06-25",
         type: "estudo",
