@@ -210,6 +210,24 @@
     //    tags: ["sonho", "carreira", "magalu cloud", "esus", "municípios", "saúde pública", "solutions architect", "mercado", "família", "motivação"],
     //  },
       {
+        id: 22,
+        date: "2026-07-09",
+        type: "projeto",
+        title: "Sprint de Inovação — Fluxo Visual para VPC, Subnets e Security Groups (issue #17)",
+        content:
+          "Contribuição pra issue #17 do repositório de turma (Sprint de Inovação — Magalu Cloud), atuando como Engenharia, não Dev.\n\nDECISÃO DE ESCOPO\nA issue permitia código, automação ou documentação. Optei por entregar o desenho do fluxo — um documento de arquitetura pro time de implementação seguir — em vez de um protótipo funcional. Faz mais sentido pro papel de Engenharia do que sair codando uma tela.\n\nPROBLEMA IDENTIFICADO\nHoje criar VPC, Subnet e Security Group na Magalu Cloud só é possível via CLI (mgc). Não existe um fluxo visual guiado no console que amarre a ordem obrigatória (VPC → Subnet → SG → Regra) nem avise que subnet não existe sem VPC criada antes.\n\nPROPOSTA\nWizard de 4 etapas sequenciais, cada uma só libera a próxima quando o recurso anterior existe:\n1. VPC\n2. Subnets (pública e privada)\n3. Grupo de segurança — opção de criar novo ou reaproveitar existente; se novo, escolhe o SO da instância (Linux/Windows) e o wizard já libera a porta administrativa certa (22 ou 3389) restrita ao IP de quem está criando, em vez de 0.0.0.0/0\n4. Regras adicionais (opcional)\n\nDOCUMENTO ENTREGUE\nDiagrama de fluxo em mermaid (renderiza direto no GitHub), mapeamento de cada etapa pro comando mgc correspondente, estados de erro a cobrir (CIDR sobreposto, VPC ainda em processing, grupo existente sem regra de acesso) e notas de segurança.\n\nGIT E GITHUB\nBranch feature/add-design-vpc criada a partir da developer atualizada. Commit único com o arquivo desafios/add-design-vpc.md. PR #60 aberta contra developer, com descrição estruturada (o que é / problema / solução / por que documentação / como revisar).\n\nCONCEITOS CONSOLIDADOS\nContribuição de documentação é uma entrega válida num fluxo de engenharia real — nem toda issue de melhoria de plataforma exige código, às vezes o valor está em desenhar o problema e a solução pro time certo implementar.\nSegurança por padrão: regra de acesso administrativo restrita ao IP de criação, não a rede inteira, é uma escolha de design que vale documentar explicitamente, não só aplicar.",
+        tags: ["sprint de inovação", "vpc", "security groups", "documentação", "arquitetura", "mermaid", "github", "pull request", "engenharia", "mgc", "movetech"],
+      },
+      {
+        id: 21,
+        date: "2026-07-08",
+        type: "projeto",
+        title: "e-SUS Homologação — Atualização para versão 5.5.22 via CLI",
+        content:
+          "Atualização do e-SUS APS PEC em homologação, de 5.5.19 para 5.5.22, com o console da Magalu Cloud fora do ar no momento — tudo resolvido via CLI.\n\nVM DESLIGADA\nA VM esus-vai estava com state stopped. Ligada via mgc virtual-machine instances start, validando o status com mgc virtual-machine instances get até virar running antes de tentar SSH.\n\nATUALIZAÇÃO\nsudo systemctl stop e-SUS-PEC\nwget https://arquivos.esusaps.ufsc.br/PEC/e89abd64bbc5418e/5.5.22/eSUS-AB-PEC-5.5.22-Linux64.jar\nsudo java -jar eSUS-AB-PEC-5.5.22-Linux64.jar -console\n\nResultado: migração de banco concluída e serviço subiu automaticamente. Validado em https://esus-homologacao.k8sloss.com.br.\n\nCONCEITOS CONSOLIDADOS\nMesmo com o painel visual fora do ar, o CLI garante que operações essenciais (ligar VM, atualizar sistema) continuam disponíveis — reforça a importância de dominar os dois caminhos, não só o console.\nAntes de tentar SSH numa VM recém-ligada, sempre validar o status via CLI (running + completed) em vez de tentar direto — evita connection refused no meio do boot.",
+        tags: ["esus", "5.5.22", "cli", "mgc", "homologação", "atualização", "troubleshooting", "movetech"],
+      },
+      {
         id: 20,
         date: "2026-07-07",
         type: "estudo",
