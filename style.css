@@ -196,17 +196,23 @@ body {
     background: #ddd;
 }
 
-/* Responsivo */
+/* Responsivo — cabeçalho e hero */
 @media (max-width: 768px) {
     .topbar-inner {
         flex-direction: column;
         align-items: flex-start;
+        gap: 0.6rem;
     }
 
     .nav-links {
         width: 100%;
         justify-content: flex-start;
         flex-wrap: wrap;
+        gap: 0.4rem 0.8rem;
+    }
+
+    .brand-subtitle {
+        font-size: 0.72rem;
     }
 
     .hero-top {
