@@ -342,6 +342,45 @@
     </div>
   </div>
 
+    <div class="cap-card card">
+      <h3>Command e Args — Sobrescrevendo Entrypoint e Cmd</h3>
+      <p class="cap-meta">PICK · Preparação CKA · Command</p>
+      <p class="resumo-curto">
+        O Kubernetes espelha o conceito de <code>ENTRYPOINT</code>/<code>CMD</code> do Docker através dos campos <code>command</code> e <code>args</code> na definição do Pod. Entender a diferença entre os dois é essencial pra customizar o comportamento de um container sem precisar reconstruir a imagem.
+      </p>
+      <p class="conceitos-titulo">🔑 Conceitos-chave</p>
+      <table class="conceitos-tabela">
+        <thead><tr><th>Docker</th><th>Kubernetes</th><th>Função</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ENTRYPOINT</strong></td><td><code>command</code></td><td>Comando executado no container. Definir <code>command</code> substitui o ENTRYPOINT inteiro.</td></tr>
+          <tr><td><strong>CMD</strong></td><td><code>args</code></td><td>Argumentos passados pro comando. Definir <code>args</code> substitui só o CMD, mantendo o ENTRYPOINT original.</td></tr>
+        </tbody>
+      </table>
+      <p class="conceitos-titulo" style="margin-top:1rem;">🧩 Tabela de combinações</p>
+      <table class="conceitos-tabela">
+        <thead><tr><th>Image Entrypoint</th><th>Image Cmd</th><th>Container command</th><th>Container args</th><th>Comando executado</th></tr></thead>
+        <tbody>
+          <tr><td><code>[/echo]</code></td><td><code>[foo]</code></td><td>não definido</td><td>não definido</td><td><code>echo foo</code></td></tr>
+          <tr><td><code>[/echo]</code></td><td><code>[foo]</code></td><td><code>[/printf]</code></td><td>não definido</td><td><code>printf</code></td></tr>
+          <tr><td><code>[/echo]</code></td><td><code>[foo]</code></td><td>não definido</td><td><code>[bar]</code></td><td><code>echo bar</code></td></tr>
+          <tr><td><code>[/echo]</code></td><td><code>[foo]</code></td><td><code>[/printf]</code></td><td><code>[bar]</code></td><td><code>printf bar</code></td></tr>
+        </tbody>
+      </table>
+      <p class="conceitos-titulo" style="margin-top:1rem;">📝 Questão de prova (estilo real)</p>
+      <p class="resumo-curto">
+        Um Dockerfile define <code>ENTRYPOINT ["sleep"]</code> e <code>CMD ["5"]</code>. Tarefa: criar um Pod que faça o container dormir 10 segundos em vez de 5, sem trocar o ENTRYPOINT.
+      </p>
+      <table class="conceitos-tabela">
+        <tbody>
+          <tr><td><code>apiVersion: v1<br>kind: Pod<br>metadata:<br>&nbsp;&nbsp;name: ubuntu-sleeper-pod<br>spec:<br>&nbsp;&nbsp;containers:<br>&nbsp;&nbsp;- name: ubuntu-sleeper<br>&nbsp;&nbsp;&nbsp;&nbsp;image: ubuntu-sleeper<br>&nbsp;&nbsp;&nbsp;&nbsp;args: ["10"]</code></td></tr>
+        </tbody>
+      </table>
+      <div class="fixacao">
+        <strong>💡 Para fixar</strong>
+        Pegadinha clássica: se você define <code>command</code> sem definir <code>args</code>, o Cmd original da imagem some por completo — mesmo que não tenha relação com o que você queria mudar. Sempre replique os args originais se só quiser trocar o comando.
+      </div>
+    </div>
+
     <!-- ══════════════════════════════════════════
          STORAGE — 10%
     ══════════════════════════════════════════ -->
@@ -358,6 +397,13 @@
     <div id="diario" class="domain-header">
       <h2>📅 Diário de Estudo CKA</h2>
     </div>
+    <div class="diario-item">
+        <div class="diario-data">24/09</div>
+        <div class="diario-corpo">
+          <h4>Command e args — sobrescrevendo ENTRYPOINT/CMD</h4>
+          <p>Aula Command do PICK: diferença entre command/args do Kubernetes e ENTRYPOINT/CMD do Docker, tabela de combinações e exercício clássico do ubuntu-sleeper. Próximo: ReplicaSet e Deployment.</p>
+        </div>
+      </div>
     <div class="card" style="padding: 1.5rem;">
       <div class="diario-item">
         <div class="diario-data">24/09</div>
