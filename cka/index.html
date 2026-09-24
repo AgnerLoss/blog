@@ -302,45 +302,45 @@
     <div class="cap-card card vazio">🚧 Em construção</div>
 
     <!-- ══════════════════════════════════════════
-     WORKLOADS & SCHEDULING — 15%
-  ══════════════════════════════════════════ -->
-  <div id="workloads-scheduling" class="domain-header">
-    <h2>Workloads &amp; Scheduling</h2>
-    <span class="domain-weight">15% da prova</span>
-  </div>
-
-  <div class="cap-card card">
-    <h3>Pods — Criação, Edição e Multi-container</h3>
-    <p class="cap-meta">PICK · Preparação CKA · Pods</p>
-    <p class="resumo-curto">
-      O <strong>Pod</strong> é a menor unidade implantável do Kubernetes. Este capítulo cobre a estrutura mínima de um manifesto de Pod, os fluxos de criação/edição via <code>kubectl</code> e como declarar múltiplos contêineres num mesmo Pod, compartilhando rede e, opcionalmente, volumes.
-    </p>
-    <p class="conceitos-titulo">🔑 Conceitos-chave</p>
-    <table class="conceitos-tabela">
-      <thead><tr><th>Conceito</th><th>O que é</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Pod</strong></td><td>Menor unidade do K8s. Um ou mais contêineres compartilhando IP, rede e, opcionalmente, storage.</td></tr>
-        <tr><td><strong>Campos mutáveis</strong></td><td><code>kubectl edit</code> só permite alterar campos limitados (ex: <code>image</code>, <code>tolerations</code>). Pra mudar o resto, é preciso recriar o Pod.</td></tr>
-        <tr><td><strong>Multi-container Pod</strong></td><td>Contêineres no mesmo Pod acessam uns aos outros via <code>localhost</code>, cada um com seu próprio filesystem.</td></tr>
-        <tr><td><strong>Sidecar container</strong></td><td>Desde o K8s 1.28, <code>initContainers</code> com <code>restartPolicy: Always</code> rodam como sidecar de longa duração, junto ao container principal.</td></tr>
-      </tbody>
-    </table>
-    <p class="conceitos-titulo" style="margin-top:1rem;">🛠️ Comandos essenciais</p>
-    <table class="conceitos-tabela">
-      <thead><tr><th>Ação</th><th>Comando</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Gerar YAML sem aplicar</strong></td><td><code>kubectl run nginx --image nginx -o yaml --dry-run=client</code></td></tr>
-        <tr><td><strong>Substituir forçando recriação</strong></td><td><code>kubectl replace -f pod.yaml --force --grace-period=0</code></td></tr>
-        <tr><td><strong>Editar pod (campos mutáveis)</strong></td><td><code>kubectl edit po nome-do-pod</code></td></tr>
-        <tr><td><strong>Extrair YAML de pod rodando</strong></td><td><code>kubectl get po nome-do-pod -o yaml > pod.yaml</code></td></tr>
-        <tr><td><strong>Logs em pod multi-container</strong></td><td><code>kubectl logs nome-do-pod -c nome-do-container</code></td></tr>
-      </tbody>
-    </table>
-    <div class="fixacao">
-      <strong>💡 Para fixar</strong>
-      Não existe "atualizar um Pod" de verdade — na prática, quase tudo que não é campo mutável exige apagar e recriar (<code>replace --force --grace-period=0</code>). Isso é diferente de Deployment, que gerencia esse ciclo pra você via ReplicaSet.
+         WORKLOADS & SCHEDULING — 15%
+    ══════════════════════════════════════════ -->
+    <div id="workloads-scheduling" class="domain-header">
+      <h2>Workloads &amp; Scheduling</h2>
+      <span class="domain-weight">15% da prova</span>
     </div>
-  </div>
+
+    <div class="cap-card card">
+      <h3>Pods — Criação, Edição e Multi-container</h3>
+      <p class="cap-meta">PICK · Preparação CKA · Pods</p>
+      <p class="resumo-curto">
+        O <strong>Pod</strong> é a menor unidade implantável do Kubernetes. Este capítulo cobre a estrutura mínima de um manifesto de Pod, os fluxos de criação/edição via <code>kubectl</code> e como declarar múltiplos contêineres num mesmo Pod, compartilhando rede e, opcionalmente, volumes.
+      </p>
+      <p class="conceitos-titulo">🔑 Conceitos-chave</p>
+      <table class="conceitos-tabela">
+        <thead><tr><th>Conceito</th><th>O que é</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Pod</strong></td><td>Menor unidade do K8s. Um ou mais contêineres compartilhando IP, rede e, opcionalmente, storage.</td></tr>
+          <tr><td><strong>Campos mutáveis</strong></td><td><code>kubectl edit</code> só permite alterar campos limitados (ex: <code>image</code>, <code>tolerations</code>). Pra mudar o resto, é preciso recriar o Pod.</td></tr>
+          <tr><td><strong>Multi-container Pod</strong></td><td>Contêineres no mesmo Pod acessam uns aos outros via <code>localhost</code>, cada um com seu próprio filesystem.</td></tr>
+          <tr><td><strong>Sidecar container</strong></td><td>Desde o K8s 1.28, <code>initContainers</code> com <code>restartPolicy: Always</code> rodam como sidecar de longa duração, junto ao container principal.</td></tr>
+        </tbody>
+      </table>
+      <p class="conceitos-titulo" style="margin-top:1rem;">🛠️ Comandos essenciais</p>
+      <table class="conceitos-tabela">
+        <thead><tr><th>Ação</th><th>Comando</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Gerar YAML sem aplicar</strong></td><td><code>kubectl run nginx --image nginx -o yaml --dry-run=client</code></td></tr>
+          <tr><td><strong>Substituir forçando recriação</strong></td><td><code>kubectl replace -f pod.yaml --force --grace-period=0</code></td></tr>
+          <tr><td><strong>Editar pod (campos mutáveis)</strong></td><td><code>kubectl edit po nome-do-pod</code></td></tr>
+          <tr><td><strong>Extrair YAML de pod rodando</strong></td><td><code>kubectl get po nome-do-pod -o yaml > pod.yaml</code></td></tr>
+          <tr><td><strong>Logs em pod multi-container</strong></td><td><code>kubectl logs nome-do-pod -c nome-do-container</code></td></tr>
+        </tbody>
+      </table>
+      <div class="fixacao">
+        <strong>💡 Para fixar</strong>
+        Não existe "atualizar um Pod" de verdade — na prática, quase tudo que não é campo mutável exige apagar e recriar (<code>replace --force --grace-period=0</code>). Isso é diferente de Deployment, que gerencia esse ciclo pra você via ReplicaSet.
+      </div>
+    </div>
 
     <div class="cap-card card">
       <h3>Command e Args — Sobrescrevendo Entrypoint e Cmd</h3>
@@ -390,21 +390,20 @@
     </div>
     <div class="cap-card card vazio">🚧 Em construção</div>
 
-    
     <!-- ══════════════════════════════════════════
          DIÁRIO DE ESTUDO CKA
     ══════════════════════════════════════════ -->
     <div id="diario" class="domain-header">
       <h2>📅 Diário de Estudo CKA</h2>
     </div>
-    <div class="diario-item">
+    <div class="card" style="padding: 1.5rem;">
+      <div class="diario-item">
         <div class="diario-data">24/09</div>
         <div class="diario-corpo">
           <h4>Command e args — sobrescrevendo ENTRYPOINT/CMD</h4>
           <p>Aula Command do PICK: diferença entre command/args do Kubernetes e ENTRYPOINT/CMD do Docker, tabela de combinações e exercício clássico do ubuntu-sleeper. Próximo: ReplicaSet e Deployment.</p>
         </div>
       </div>
-    <div class="card" style="padding: 1.5rem;">
       <div class="diario-item">
         <div class="diario-data">24/09</div>
         <div class="diario-corpo">
