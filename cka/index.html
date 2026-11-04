@@ -381,6 +381,39 @@
       </div>
     </div>
 
+    <div class="cap-card card">
+      <h3>Configuração e Segurança — ConfigMaps e Secrets</h3>
+      <p class="cap-meta">PICK · Preparação CKA · ConfigMap & Secrets</p>
+      <p class="resumo-curto">
+        Objetos para injetar dados em contêineres sem fixá-los na imagem. <strong>ConfigMaps</strong> guardam dados não confidenciais em chave-valor. <strong>Secrets</strong> gerenciam dados sensíveis (senhas, tokens) armazenados em base64. Ambos podem ser consumidos no Pod como: 1) Variáveis de ambiente, 2) Arquivos em volume montado, ou 3) Em command/args.
+      </p>
+      <p class="conceitos-titulo">🛠️ Criação Imperativa</p>
+      <table class="conceitos-tabela">
+        <thead><tr><th>Tipo</th><th>Comando de Exemplo</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Literal</strong></td><td><code>kubectl create configmap meu-cm --from-literal=chave=valor</code></td></tr>
+          <tr><td><strong>Arquivo</strong></td><td><code>kubectl create secret generic min-sec --from-file=./pass.txt</code></td></tr>
+          <tr><td><strong>Env File</strong></td><td><code>kubectl create configmap cm-env --from-env-file=env.conf</code></td></tr>
+          <tr><td><strong>Registry</strong></td><td><code>kubectl create secret docker-registry ... --docker-username=X ...</code></td></tr>
+        </tbody>
+      </table>
+      <p class="conceitos-titulo" style="margin-top:1rem;">🧩 Consumo no Pod (Sintaxe YAML)</p>
+      <table class="conceitos-tabela">
+        <thead><tr><th>Método</th><th>Estrutura no Spec</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Env Única</strong></td><td><code>valueFrom: configMapKeyRef</code> ou <code>secretKeyRef</code></td></tr>
+          <tr><td><strong>Todas as Envs</strong></td><td><code>envFrom:<br>  - configMapRef:<br>      name: meu-cm</code></td></tr>
+          <tr><td><strong>Volume Mount</strong></td><td>Cria o <code>volumes: - secret: secretName: ...</code> e usa o <code>volumeMounts</code> no container.</td></tr>
+        </tbody>
+      </table>
+      <div class="fixacao">
+        <strong>💡 Para fixar (Prova)</strong>
+        Ao gerar um base64 manualmente no terminal para criar uma Secret declarativa, <strong>SEMPRE use a flag <code>-n</code></strong>: <br>
+        <code>echo -n 'senhasegura' | base64</code> <br>
+        Se esquecer o <code>-n</code>, o Linux vai adicionar uma quebra de linha (newline) no final, encodando-a junto, o que vai quebrar a autenticação da sua aplicação.
+      </div>
+    </div>
+
     <!-- ══════════════════════════════════════════
          STORAGE — 10%
     ══════════════════════════════════════════ -->
@@ -388,7 +421,51 @@
       <h2>Storage</h2>
       <span class="domain-weight">10% da prova</span>
     </div>
-    <div class="cap-card card vazio">🚧 Em construção</div>
+
+    <div class="cap-card card">
+      <h3>Persistent Volumes (PV) e Claims (PVC)</h3>
+      <p class="cap-meta">PICK · Preparação CKA · Volumes Persistentes</p>
+      <p class="resumo-curto">
+        Um <strong>PersistentVolume (PV)</strong> é a infraestrutura de armazenamento do cluster, provisionado pelo administrador ou dinamicamente via <em>Storage Classes</em>, com ciclo de vida independente dos Pods. Um <strong>PersistentVolumeClaim (PVC)</strong> é a solicitação desse armazenamento feita pelo usuário. Os Pods consomem o PVC, e o PVC consome o PV.
+      </p>
+      <p class="conceitos-titulo">🔑 Access Modes</p>
+      <table class="conceitos-tabela">
+        <thead><tr><th>Modo</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ReadWriteOnce (RWO)</strong></td><td>Montado como leitura e escrita (read-write) por um <em>único</em> node.</td></tr>
+          <tr><td><strong>ReadOnlyMany (ROX)</strong></td><td>Montado como somente leitura (read-only) por <em>vários</em> nodes.</td></tr>
+          <tr><td><strong>ReadWriteMany (RWX)</strong></td><td>Montado como leitura e escrita (read-write) por <em>vários</em> nodes.</td></tr>
+        </tbody>
+      </table>
+      <p class="conceitos-titulo" style="margin-top:1rem;">🧩 Reclaim Policy (Ação após exclusão do PVC)</p>
+      <table class="conceitos-tabela">
+        <thead><tr><th>Política</th><th>Ação</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Retain</strong></td><td>Exige ação manual para limpeza do volume.</td></tr>
+          <tr><td><strong>Recycle</strong></td><td>Faz uma limpeza básica (<code>rm -rf /thevolume/*</code>) e reaproveita o volume.</td></tr>
+          <tr><td><strong>Delete</strong></td><td>Deleta efetivamente o volume na infraestrutura cloud (AWS EBS, Azure Disk, GCE PD, etc).</td></tr>
+        </tbody>
+      </table>
+      <div class="fixacao">
+        <strong>💡 Para fixar (Prova)</strong>
+        Para forçar um PVC a dar "bind" em um PV específico, use <code>volumeName: nome-do-pv</code> ou aplique um <code>selector</code> (matchLabels). Em PVs do tipo <strong>hostPath</strong> com <code>DirectoryOrCreate</code>, o K8s cria o diretório automaticamente com permissão <code>0755</code> e owner do Kubelet se ele não existir no nó.
+      </div>
+    </div>
+
+    <div class="cap-card card">
+      <h3>Volumes Efêmeros: emptyDir</h3>
+      <p class="cap-meta">PICK · Preparação CKA · EmptyDir</p>
+      <p class="resumo-curto">
+        Um volume <code>emptyDir</code> é criado quando um Pod é atribuído a um nó e <strong>existe apenas enquanto esse Pod estiver em execução naquele nó</strong>. É ideal para compartilhar arquivos de forma rápida entre contêineres do mesmo Pod (ex: um container gravando logs e um sidecar lendo esses mesmos logs).
+      </p>
+      <table class="conceitos-tabela">
+        <tbody>
+          <tr><td><strong>Declaração básica</strong></td><td>
+<code>volumes:<br>&nbsp;&nbsp;- name: meu-empty<br>&nbsp;&nbsp;&nbsp;&nbsp;emptyDir: {}</code>
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- ══════════════════════════════════════════
          DIÁRIO DE ESTUDO CKA
@@ -397,6 +474,20 @@
       <h2>📅 Diário de Estudo CKA</h2>
     </div>
     <div class="card" style="padding: 1.5rem;">
+      <div class="diario-item">
+        <div class="diario-data">03/11</div>
+        <div class="diario-corpo">
+          <h4>Armazenamento e Configuração dominados</h4>
+          <p>Maratona PICK: Finalizada toda a teoria e prática de PVs (hostPath), PVCs (AccessModes e Policies), emptyDir, além da injeção de configurações em contêineres usando ConfigMaps e Secrets (literal, file e env-file). Trilha de containers chegando aos 85% de conclusão.</p>
+        </div>
+      </div>
+      <div class="diario-item">
+        <div class="diario-data">03/11</div>
+        <div class="diario-corpo">
+          <h4>ReplicaSet e Deployment</h4>
+          <p>Aula assistida da trilha do PICK focando no ciclo de vida gerenciado dos pods. Entendimento da abstração em camadas: Deployment controla ReplicaSet, que controla Pods.</p>
+        </div>
+      </div>
       <div class="diario-item">
         <div class="diario-data">24/09</div>
         <div class="diario-corpo">
@@ -418,7 +509,6 @@
           <p>Recomecei a trilha "Preparação CKA" do PICK do zero, mesmo em 84% de progresso geral. Setup de ambiente local: Docker, kind, kubectl, alias <code>k</code> e autocomplete configurados. Próximo: aula de Pods.</p>
         </div>
       </div>
-      <!-- Novas entradas do diário entram aqui, mais recente no topo -->
     </div>
 
     <div class="card" style="text-align:center;font-size:0.82rem;color:#94a3b8;">
