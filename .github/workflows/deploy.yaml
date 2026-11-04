@@ -1,9 +1,9 @@
-name: Deploy HTML to Magalu Object Storage
+name: Deploy to Magalu Object Storage
 
 on:
   push:
     branches:
-      - main  # ou master, dependendo da branch principal do seu repositório
+      - main
 
 jobs:
   deploy:
@@ -13,11 +13,11 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Instalar AWS CLI (Compatível com o S3 da Magalu)
+      - name: Instalar AWS CLI
         run: |
           sudo apt-get update && sudo apt-get install -y awscli
 
-      - name: Sincronizar ficheiros HTML com o Bucket Magalu Cloud
+      - name: Sincronizar ficheiros com o Bucket Magalu Cloud
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.MAGALU_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.MAGALU_SECRET_ACCESS_KEY }}
